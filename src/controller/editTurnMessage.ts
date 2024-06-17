@@ -31,8 +31,8 @@ export const editTurnMessage = async (req, res) => {
       };
     }
 
-    const abc = await provider.getInstance();
-    await abc.sendMessage(id, templateMessage);
+    await provider.sendMessage(id, templateMessage, {});
+
     res.send({ data: "enviado!" });
   } catch (error) {
     console.log("ERROR AL EDITAR TURNO MEDIANTE ESTE DOCKER: ", error);

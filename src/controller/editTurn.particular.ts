@@ -1,9 +1,10 @@
 import axios from "axios";
 import provider from "../provider/provider.js";
+import { Request, Response } from "express";
 
-export const editTurnParticular = async (req, res) => {
+export const editTurnParticular = async (req: Request, res: Response) => {
+  const { turnToSendCustomer } = req.body;
   try {
-    const { turnToSendCustomer } = req.body;
     const response = await axios.post(
       `http://${turnToSendCustomer.uid}:4000/edit-turn`, {turnToSendCustomer}
     );

@@ -75,6 +75,7 @@ export const sendMessageCron = async () => {
           },
         };
       });
+      
     const abc = await provider.getInstance();
     nextDayTurns.forEach(async (turn, index) => {
      /*  setTimeout(async () => {

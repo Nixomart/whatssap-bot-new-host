@@ -1,9 +1,7 @@
 import axios from "axios";
-import provider from "../provider/provider.js";
-
 export const cancelTurnSendParticular = async (req, res) => {
+  const { turnToSendCustomer } = req.body;
   try {
-    const { turnToSendCustomer } = req.body;
     const response = await axios.post(
       `http://${turnToSendCustomer.uid}:4000/cancel-turn`,
       { turnToSendCustomer }

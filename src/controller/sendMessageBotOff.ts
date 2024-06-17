@@ -4,8 +4,7 @@ export const sendMessageBotOff = async(req, res) =>{
     const {phone} = req.params
     try {
         const id = `549${phone}@c.us`;
-        const templateMessage = {
-          text: `🚨🔴🚨 ALERTA URGENTE 🚨🔴🚨
+        const templateMessage = `🚨🔴🚨 ALERTA URGENTE 🚨🔴🚨
     
           ¡El bot se ha APAGADO! 🛑 Esto impide que tus pacientes puedan comunicarse automáticamente con nuestro sistema. 🚫🤖
           
@@ -13,11 +12,9 @@ export const sendMessageBotOff = async(req, res) =>{
           
           🔄 Mientras tanto, estaremos utilizando el sistema de respaldo para garantizar la continuidad del servicio.
           
-          🙏 Agradecemos tu rápida respuesta. ¡Es urgente!`,
-          footer: "Sistema: PedirTurno.online",
-        };
-        const abc = await provider.getInstance();
-        await abc.sendMessage(id, templateMessage);
+          🙏 Agradecemos tu rápida respuesta. ¡Es urgente!`
+        await provider.sendMessage(id, templateMessage, {});
+
         res.send({ data: "enviado!" });
       } catch (error) {
        

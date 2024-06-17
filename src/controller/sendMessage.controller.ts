@@ -1,4 +1,4 @@
-import provider from "../provider/provider.js";
+import provider from "../provider/provider";
 
 export const sendMessage = async  (req, res) =>{
     try {
@@ -27,13 +27,9 @@ export const sendMessage = async  (req, res) =>{
             turnsText += `✅ *Cliente:* ${turn.customer}, 🕗 *Fecha:* ${turn.date} \n`;
           });
   
-          const templateMessage = {
-            text: `💢💢 Hola, *${specialist.specialist}.* 👨‍⚕️ 💢💢 \n\n *Tienes los siguientes turnos:*\n${turnsText} \n\n *Para ver tu calendario de turnos, ingresa a este sitio* \n\n ${specialist.link}  `,
-            footer: "Sistema: PedirTurno.online",
-            /* templateButtons: templateButtons, */
-          };
-          const abc = await provider.getInstance();
-          await abc.sendMessage(id, templateMessage);
+          const templateMessage =  `💢💢 Hola, *${specialist.specialist}.* 👨‍⚕️ 💢💢 \n\n *Tienes los siguientes turnos:*\n${turnsText} \n\n *Para ver tu calendario de turnos, ingresa a este sitio* \n\n ${specialist.link}`
+          
+           await provider.sendMessage(id, templateMessage , {});
           console.log("ID: ", id, "ENVIA A ESPECIALISTA ESPECIALISTA, RAPIDO: /send-message-provider");
         }
   

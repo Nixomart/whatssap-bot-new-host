@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import provider from "../provider/provider.js";
 
 export const sendMessageCronParticular = async (data) => {
@@ -38,7 +39,8 @@ export const sendMessageCronParticular = async (data) => {
     const abc = await provider.getInstance();
     nextDayTurns.forEach(async (turn, index) => {
       setTimeout(async () => {
-        await abc.sendMessage(turn.id, turn.templateMessage);
+        await provider.sendMessage(turn.id, turn.templateMessage, {});
+
       }, index * 2 * 60 * 1000);
     });
   } catch (error) {

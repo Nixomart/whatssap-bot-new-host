@@ -3,20 +3,16 @@ import {
   createBot,
   createProvider,
   createFlow,
-  addKeyword,
-  utils,
 } from "@builderbot/bot";
 import fs from "fs";
 
 import { MemoryDB as Database } from "@builderbot/bot";
 import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
-import indexFlow from "./flows/index.flow";
 import dayjs from "dayjs";
 import "dayjs/locale/es.js";
 import express from "express";
-import provider from "./provider/provider";
 import cors from "cors";
-import { getQr } from "./controller/getQr.service";
+import provider from "./provider/provider";
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
@@ -31,7 +27,7 @@ const main = async () => {
   const { handleCtx, httpServer } = await createBot({
     /* flow: indexFlow, */
     flow: createFlow([]),
-    provider: adapterProvider,
+    provider: provider,
     database: adapterDB,
   });
   /* app.post("/v1/messages", async(req, res) => {

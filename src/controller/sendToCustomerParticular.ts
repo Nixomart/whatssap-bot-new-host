@@ -63,8 +63,7 @@ export const sendToCustomerParticular = async (req, res) => {
         footer: "Sistema: pedirturno.online",
       };
     }
-    const abc = await provider.getInstance();
-    await abc.sendMessage(id, templateMessage);
+    await provider.sendMessage(id, templateMessage, {});
     res.send({ data: "enviado!" });
   } catch (error) {
     console.log("ERROR AL ENVIAR TURNO CONFIRMADO MEDIANTE ESTE DOCKER: ", error);

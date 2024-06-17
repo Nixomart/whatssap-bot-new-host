@@ -33,8 +33,8 @@ export const sendTurnCustomerToPay = async (req, res) => {
       };
     }
     
-    const abc = await provider.getInstance();
-    await abc.sendMessage(id, templateMessage);
+    await provider.sendMessage(id, templateMessage, {});
+
     res.send({ data: "enviado!" });
   } catch (error) {
     console.log("ERROR AL ENVIAR TURNO PARA PAGAR MEDIANTE ESTE DOCKER: ", error);
