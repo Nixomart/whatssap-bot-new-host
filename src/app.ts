@@ -13,6 +13,7 @@ import "dayjs/locale/es.js";
 import express from "express";
 import cors from "cors";
 import provider from "./provider/provider";
+import { sendMessage } from "./controller/sendMessage.controller";
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
@@ -20,7 +21,6 @@ dayjs.locale("es");
 const PORT = process.env.PORT ?? 3008;
 const main = async () => {
   const adapterFlow = createFlow([]);
-
   const adapterProvider = createProvider(Provider);
   const adapterDB = new Database();
 
@@ -30,12 +30,11 @@ const main = async () => {
     provider: provider,
     database: adapterDB,
   });
-  /* app.post("/v1/messages", async(req, res) => {
-    const { number, message } = req.body;
-    await provider.sendMessage(number, message);
-    res.send("send!!")
-  }); */
 
+  adapterProvider.server.post("/send-message-provider", handleCtx(async(bot, req, res) => {
+    await sendMessage(bot, req, res)
+  }))
+  provider.releaseSessionFiles()
   adapterProvider.server.post(
     "/v1/messages",
     handleCtx(async (bot, req, res) => {

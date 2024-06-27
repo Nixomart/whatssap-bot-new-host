@@ -1,6 +1,6 @@
 import provider from "../provider/provider";
 
-export const sendMessage = async  (req, res) =>{
+export const sendMessage = async  (bot,req, res) =>{
     try {
         const { turnToSend } = req.body;
         const specialist = turnToSend[0];
@@ -29,13 +29,13 @@ export const sendMessage = async  (req, res) =>{
   
           const templateMessage =  `💢💢 Hola, *${specialist.specialist}.* 👨‍⚕️ 💢💢 \n\n *Tienes los siguientes turnos:*\n${turnsText} \n\n *Para ver tu calendario de turnos, ingresa a este sitio* \n\n ${specialist.link}`
           
-           await provider.sendMessage(id, templateMessage , {});
+           await bot.sendMessage(id, templateMessage , {});
           console.log("ID: ", id, "ENVIA A ESPECIALISTA ESPECIALISTA, RAPIDO: /send-message-provider");
         }
   
-        res.send({ data: "enviado!" });
+        res.end({ data: "enviado!" });
       } catch (error) {
         console.log("ERROR AL EVNIAR MENSAJE: ", error);
-        res.send({ data: "No se pudo enviar mensaje" });
+        res.end({ data: "No se pudo enviar mensaje" });
       }
 }
