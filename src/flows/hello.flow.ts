@@ -50,7 +50,7 @@ export default addKeyword<Provider, Database>(["miturno", "Miturno"],{ sensitive
         */
         if (medicData.ownBot === true) {
           return endFlow(
-            `*¡Ups!* 🤷‍♂️\n\n👨‍⚕️ El médico tiene su propio bot de asistencia. 🤖 Si necesitas registrar un turno, simplemente envía un mensaje diciendo "turno" al siguiente número: 📲 ${medicData.phone}.\n\nO, si prefieres, puedes iniciar la conversación directamente haciendo clic en este enlace:\nhttps://wa.me/549${medicData.profile.socialNetwork.whatssap}?text=miturno\n\n¡No te quedes sin tu cita! Hazlo ahora mismo. 🕒`
+            `*¡Ups!* 🤷‍♂️\n\n👨‍⚕️ El médico tiene su propio bot de asistencia. 🤖 Si necesitas registrar un turno, simplemente envía un mensaje diciendo "turno" al siguiente número: 📲 ${medicData.profile.socialNetwork.whatssap}.\n\nO, si prefieres, puedes iniciar la conversación directamente haciendo clic en este enlace:\nhttps://wa.me/549${medicData.profile.socialNetwork.whatssap}?text=miturno\n\n¡No te quedes sin tu cita! Hazlo ahora mismo. 🕒`
           );
         }
         if (customerFound != undefined) {

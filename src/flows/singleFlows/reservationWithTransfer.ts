@@ -2,9 +2,14 @@
 import dayjs from "dayjs";
 import { writeFile } from "fs/promises";
 import { saveInFirebaseTurn } from "../../fuctions/saveInFirebasenewTurn.js";
-import {updateFirebaseData} from "../../fuctions/updateFirebaseData.js";
+import { updateFirebaseData } from "../../fuctions/updateFirebaseData.js";
 import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
-import { MemoryDB as Database, EVENTS, addKeyword, utils } from "@builderbot/bot";
+import {
+  MemoryDB as Database,
+  EVENTS,
+  addKeyword,
+  utils,
+} from "@builderbot/bot";
 import provider from "~/provider/provider.js";
 
 export default addKeyword<Provider, Database>(EVENTS.MEDIA).addAction(
@@ -12,26 +17,40 @@ export default addKeyword<Provider, Database>(EVENTS.MEDIA).addAction(
     try {
       const data = state.getMyState();
       console.log("ENTRA A ");
-      
+
       if (
         (data !== undefined && state.getMyState().hasOwnProperty("turnoNew")) ||
-        data.hasOwnProperty("resend") && data.resend
+        (data.hasOwnProperty("resend") && data.resend)
       ) {
         if (state.getMyState().turnoNew.paymentMethod.includes("transfer")) {
           const turnoNew = state.getMyState().turnoNew;
           const dataUpdated = await updateFirebaseData(data.medic.uid);
           console.log("TURNO ID: ", turnoNew.id);
-          await state.update({ medic: {...dataUpdated, turnId: turnoNew.id} });
+          await state.update({
+            medic: { ...dataUpdated, turnId: turnoNew.id },
+          });
           const turno = turnoNew;
           if (turno.imageConfirmation === null) {
             const medicData = state.getMyState().medic;
             console.log("entra a saveFile provider. ");
-            const localPath = await provider.saveFile(ctx, {path:`./`})
+            const localPath = await provider.saveFile(ctx, { path: `./` });
             console.log("LOCALPATH: ", localPath);
-            
+
             await saveInFirebaseTurn(medicData, localPath);
             return endFlow(
-              `🙌 ¡GRACIAS! Recibimos con éxito la foto. Esta será enviada al especialista con *toda tu información*. ¡Muchas gracias! 📸💼\n\nAquí están los detalles de tu turno:\n📍 Dirección: *qwoenqowe*\n👨‍⚕️ Especialista: *${turnoNew.specialist}*\n📅 Fecha: *${dayjs(turnoNew.start).format("dddd D, MMMM HH:mm a")}*\n👤 Nombre: *${turnoNew.customer.name + " " + turnoNew.customer.lastname}*\n🔍 DNI: *${turnoNew.customer.dni}*\n\n📱 El número de celular donde recibirás la confirmación: ${ctx.from}\nPara volver al menu en cualquier momento escribe *miturno ${medicData.consultName}*`
+              `🙌 ¡GRACIAS! Recibimos con éxito la foto. Esta será enviada al especialista con *toda tu información*. ¡Muchas gracias! 📸💼\n\nAquí están los detalles de tu turno:\n📍 Dirección: *qwoenqowe*\n👨‍⚕️ Especialista: *${
+                medicData.name
+              }*\n📅 Fecha: *${dayjs(turnoNew.start).format(
+                "dddd D, MMMM HH:mm a"
+              )}*\n👤 Nombre: *${
+                turnoNew.customer.name + " " + turnoNew.customer.lastname
+              }*\n🔍 DNI: *${
+                turnoNew.customer.dni
+              }*\n\n📱 El número de celular donde recibirás la confirmación: ${
+                ctx.from
+              }\nPara volver al menu en cualquier momento escribe *miturno ${
+                medicData.consultName
+              }*`
             );
           } else {
             return endFlow(

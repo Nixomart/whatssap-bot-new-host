@@ -8,11 +8,12 @@ dayjs.extend(relativeTime);
 export default addKeyword<Provider, Database>(utils.setEvent("ASK_DELETE_TURN")).addAction(
   async (ctx, { state, flowDynamic, gotoFlow }) => {
     const turn = state.getMyState().medic.turnFound;
+    const medicData = state.getMyState().medic;
      await flowDynamic(
         `Turnos encontrados para *ELIMINAR* ${dayjs(turn[0].start).format(
           "dddd D, MMMM HH:mm"
-        )} \n\nAquí están los detalles de tus turnos:\nDirección: *qwoenqowe*\nEspecialista: *${
-          turn.specialist
+        )} \n\nAquí están los detalles de tus turnos:\nEspecialista: *${
+          medicData.name
         }*\n${turn
           .map(
             (turn, index) =>
