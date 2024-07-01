@@ -9,7 +9,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("DELETE_TURN_FROM_F
   { capture: true },
   async (ctx, { gotoFlow, flowDynamic, state }) => {
     const medicData = state.getMyState().medic;
-    if (ctx.body === "estoy de acuerdo") {
+    if (ctx.body.toLowerCase() == "estoy de acuerdo") {
       const docRef = doc(db, "consults", medicData.uid);
       const updatedTurns = medicData.turns.filter(
         (turn) => turn.id != medicData.turnChoosenToDelete.id

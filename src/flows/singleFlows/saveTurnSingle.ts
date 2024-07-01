@@ -20,11 +20,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_SINGLE"))
     { capture: true },
     async (ctx, { flowDynamic, state, gotoFlow }) => {
       const medicData = state.getMyState().medic;
-      if (ctx.body === "menu") {
+      if (ctx.body.toLowerCase() == "menu") {
         return gotoFlow(menuFlow);
       }
       const optionWeek = medicData.week;
-      if (ctx.body === "dias") {
+      if (ctx.body.toLowerCase() == "dias") {
         if (optionWeek > 0) {
           return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
         }

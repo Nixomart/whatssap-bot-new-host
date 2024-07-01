@@ -9,7 +9,7 @@ export default addKeyword<Provider, Database>(
   "Escribe tu numero de crendencial\n\nEscribe *pagar* 🔄 si deseas elegir otro metodo de pago.",
   { capture: true },
   async (ctx, { state, fallBack, gotoFlow, flowDynamic }) => {
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(listPaymentMethods);
     }
     if (ctx.body.length > 30) {

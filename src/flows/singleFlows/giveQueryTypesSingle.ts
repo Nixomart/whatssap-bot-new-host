@@ -16,7 +16,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("CHOOSE_PAY"))
     }
   )
   .addAction({capture: true},async (ctx, { gotoFlow, state }) => {
-    if (ctx.body === "menu") {
+    if (ctx.body.toLowerCase() == "menu") {
       return gotoFlow(menuFlow)  
     }
     await state.update({

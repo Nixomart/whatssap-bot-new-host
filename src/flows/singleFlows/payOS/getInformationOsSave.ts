@@ -6,7 +6,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("GETINFORMATION_OS_
   "Escribe tu numero de crendencial\n\nEscribe *pagar* 🔄 si deseas elegir otro metodo de pago.",
   { capture: true },
   async (ctx, { state, fallBack, gotoFlow, flowDynamic }) => {
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(seeKindOfPayments)
     }
     if (ctx.body.length > 30) {

@@ -7,7 +7,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("GET_OSNAME_TOSAVE_
   "El especialista acepta todas las obras sociales. Escribe el nombre de tu obra social. Por ejemplo. *ISJ, OSDE, ETC*\n\nEscribe *pagar* 🔄 si deseas elegir otro metodo de pago.",
   { capture: true },
   async (ctx, { state, fallBack, gotoFlow, flowDynamic }) => {
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(listPaymentMethods)
     }
     if (ctx.body.length > 30) {

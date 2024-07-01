@@ -17,10 +17,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_PRESENTIA
     const precio = state.getMyState().price;
     const statuscome = state.getMyState().statuscome
     console.log("ENTRA A PRESENTIAL COME ", ctx.body);
-    if (ctx.body == "menu") {
+    if (ctx.body.toLowerCase() == "menu") {
       return gotoFlow(menuFlow);
     }
-    if (ctx.body == "estoy seguro") {
+    if (ctx.body.toLowerCase() == "estoy seguro") {
       const docRef = doc(db, "consults", medicData.uid);
       const turnsUpdated = dataUpdated.turns.map((turn) => {
         if (turn.id === turnoNew.id) {
@@ -52,10 +52,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_PRESENTIA
         );
       });
     }
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(listPaymentMethods);
     }
-    if (ctx.body == "menu" || ctx.body == "men") {
+    if (ctx.body.toLowerCase() == "menu" || ctx.body.toLowerCase() == "men") {
       return gotoFlow(menuFlow);
     }
   }

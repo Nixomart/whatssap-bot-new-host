@@ -14,12 +14,13 @@ import { db } from "~/firebase/firebase.js";
 import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
 import { MemoryDB as Database } from "@builderbot/bot";
 dayjs.extend(isBetween);
-export default addKeyword<Provider, Database>("miturno",{ sensitive: true }).addAnswer(
+export default addKeyword<Provider, Database>(["miturno", "Miturno"],{ sensitive: true }).addAnswer(
   "Buscando especialista..🕑",
   null,
   async (ctx, { flowDynamic, endFlow, state, gotoFlow }) => {
     const medicosplit = ctx.body.split(" ");
-
+    console.log("ctx.body", ctx.body);  
+    
     if (medicosplit.length > 1) {
       const consultsRef = collection(db, "consults");
       const qeqwe = query(

@@ -1,106 +1,160 @@
-import path, { join } from "path";
-import {
-  createBot,
-  createProvider,
-  createFlow,
-} from "@builderbot/bot";
+import { createBot,  createFlow } from "@builderbot/bot";
 import fs from "fs";
-
 import { MemoryDB as Database } from "@builderbot/bot";
-import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
 import dayjs from "dayjs";
 import "dayjs/locale/es.js";
-import express from "express";
-import cors from "cors";
 import provider from "./provider/provider";
 import { sendMessage } from "./controller/sendMessage.controller";
-const app = express();
-app.use(express.json());
-app.use(cors({ origin: "*" }));
+import { sendMessageCustomer } from "./controller/sendMessageCustomer";
+import { createBotDocker } from "./controller/createBotDocker";
+import { getQrDocker } from "./controller/getQrDocker";
+import { startContainer } from "./controller/startContainer";
+import { sendMessageBotOff } from "./controller/sendMessageBotOff";
+import { controlMessageParticular } from "./controller/controlMessageParticular";
+import { sendParticularTurnConfirmedCustomer } from "./controller/sendParticularTurnConfirmedCustomer";
+import { cancelTurnSendParticular } from "./controller/cancelturn.particular";
+import { editTurnParticular } from "./controller/editTurn.particular";
+import { sendBotNotWork } from "./controller/sendBotNotWork";
+import { sendToCustomerParticular } from "./controller/sendToCustomerParticular";
+import { sendTurnCustomerToPay } from "./controller/sendTurnCustomerToPay";
+import { cancelTurnSend } from "./controller/cancelTurnSend";
+import { editTurnMessage } from "./controller/editTurnMessage";
+import cron from "node-cron"
+import { cleanFolders } from "./fuctions/cleanFolders";
+import { sendMessageCron } from "./controller/sendMessageCron.service";
+import indexFlow from "./flows/index.flow";
 dayjs.locale("es");
-const PORT = process.env.PORT ?? 3008;
+const PORT = process.env.PORT ?? 4000;
 const main = async () => {
-  const adapterFlow = createFlow([]);
-  const adapterProvider = createProvider(Provider);
   const adapterDB = new Database();
 
   const { handleCtx, httpServer } = await createBot({
-    /* flow: indexFlow, */
-    flow: createFlow([]),
+    /* flow: createFlow([]), */
+    flow: indexFlow,
     provider: provider,
     database: adapterDB,
   });
+  cron.schedule("00 17 * * *  ", async () => {
+    await sendMessageCron();
+  });
+  provider.server.post(
+    "/send-message-provider",
+    handleCtx(async (bot, req, res) => {
+      await sendMessage(bot, req, res);
+    })
+  );
+  /* envia ahora mismo, este envia al customer */
+  provider.server.post(
+    "/send-message-provider-customer",
+    handleCtx(async (bot, req, res) => {
+      await sendMessageCustomer(bot, req, res);
+    })
+  );
+  provider.server.post(
+    "/createBot/:doc",
+    handleCtx(async (bot, req, res) => {
+      await createBotDocker(bot, req, res);
+    })
+  );
+  provider.server.get(
+    "/getqr/:port/:uid",
+    handleCtx(async (bot, req, res) => {
+      await getQrDocker(bot, req, res);
+    })
+  );
+  provider.server.post(
+    "/startContenedor/:idContainer",
+    handleCtx(async (bot, req, res) => {
+      await startContainer(bot, req, res);
+    })
+  );
+  provider.server.post(
+    `/bot-off/:phone`,
+    handleCtx(async (bot, req, res) => {
+      await sendMessageBotOff(bot, req, res);
+    })
+  );
 
-  adapterProvider.server.post("/send-message-provider", handleCtx(async(bot, req, res) => {
-    await sendMessage(bot, req, res)
-  }))
-  provider.releaseSessionFiles()
-  adapterProvider.server.post(
-    "/v1/messages",
-    handleCtx(async (bot, req, res) => {
-      const { number, message, urlMedia } = req.body;
-      await bot.sendMessage(number, message, { media: urlMedia ?? null });
-      return res.end("sended");
-    })
-  );
-  adapterProvider.server.get(
-    "/",
-    handleCtx(async (bot, req, res) => {
-      return res.send("Hello world");
-    })
-  );
-  adapterProvider.server.get(
+  provider.releaseSessionFiles();
+  provider.server.get(
     "/getQR",
-    handleCtx(async (bot, req, res, ) => {
-      const qrImagePath = path.join(__dirname, 'bot.qr.png');
-      fs.readFile(qrImagePath, (err, data) => {
-        if (err) {
-          console.log("Error al leer la imagen del código QR:", err);
-          res.status(500).send("Error al leer la imagen del código QR");
-          return;
-        }
-        
-        res.setHeader('Content-Type', 'image/png');
-        res.setHeader('Content-Disposition', 'attachment; filename=bot.qr.png');
-        res.send(data);
-        
-        res.contentType("image/png");
-        res.send(data);
-      });
+    handleCtx(async (bot, req, res) => {
+      try {
+        const qrImagePath = "./bot.qr.png";
+        fs.readFile(qrImagePath, (err, data) => {
+          if (err) {
+            console.log("Error al leer la imagen del código QR:", err);
+            res.status(500).send("Error al leer la imagen del código QR");
+            return;
+          }
+          res.writeHead(200, { "Content-Type": "image/png" });
+          res.end(data);
+        });
+      } catch (error) {
+        console.log(error);
+
+        res.end(JSON.stringify({ message: "error" }));
+      }
     })
   );
-  adapterProvider.server.post(
-    "/v1/register",
+  /* *********************PARTICULAR******************************* */
+  /* ENVIO MEDIANTE EL DOCKER DEL PARTICULAR */
+  provider.server.post(
+    "/send-message-provider-customer/:document",
     handleCtx(async (bot, req, res) => {
-      const { number, name } = req.body;
-      
-      await bot.dispatch("REGISTER_FLOW", { from: number, name });
-      
-      return res.end("trigger");
+      await controlMessageParticular(bot, req, res);
+    })
+  );
+  provider.server.post(
+    "/send-message-provider-customer/:document/confirmed",
+    handleCtx(async (bot, req, res) => {
+      await sendParticularTurnConfirmedCustomer(bot, req, res);
+    })
+  );
+  /*  */ provider.server.post(
+    "/cancel-turn-message-particular",
+    handleCtx(async (bot, req, res) => {
+      await cancelTurnSendParticular(bot, req, res);
+    })
+  );
+  /*  */ provider.server.post(
+    "/edit-turn-message-particular",
+    handleCtx(async (bot, req, res) => {
+      await editTurnParticular(bot, req, res);
     })
   );
 
-  adapterProvider.server.post(
-    "/v1/samples",
+  /* ENVIO MEDIANTE ESTE DOCKER  */
+  provider.server.post(
+    "/sendBotNotWork",
     handleCtx(async (bot, req, res) => {
-      const { number, name } = req.body;
-      await bot.dispatch("SAMPLES", { from: number, name });
-      return res.end("trigger");
+      await sendBotNotWork(bot, req, res);
     })
   );
-
-  adapterProvider.server.post(
-    "/v1/blacklist",
+  provider.server.post(
+    "/send-confirmation-vps",
     handleCtx(async (bot, req, res) => {
-      const { number, intent } = req.body;
-      if (intent === "remove") bot.blacklist.remove(number);
-      if (intent === "add") bot.blacklist.add(number);
-
-      res.writeHead(200, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ status: "ok", number, intent }));
+      await sendToCustomerParticular(bot, req, res);
     })
   );
-  /* app.listen(3000, ()=>console.log(`escuachdno en ${PORT}`)) */
+  provider.server.post(
+    "/send-message-customer-to-pay",
+    handleCtx(async (bot, req, res) => {
+      await sendTurnCustomerToPay(bot, req, res);
+    })
+  );
+  /*  */ provider.server.post(
+    "/cancel-turn-message",
+    handleCtx(async (bot, req, res) => {
+      await cancelTurnSend(bot, req, res);
+    })
+  );
+  /*  */ provider.server.post(
+    "/edit-turn-message",
+    handleCtx(async (bot, req, res) => {
+      await editTurnMessage(bot, req, res);
+    })
+  );
   httpServer(+PORT);
 };
 

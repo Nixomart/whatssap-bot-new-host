@@ -10,14 +10,14 @@ export default addKeyword<Provider, Database>(utils.setEvent("GETINFORMATION_TOS
     "¿Cuál es tu nombre?\n\nEscribe *otros* 🔄 si deseas elegir otro horario.\n\nEscribe *menu* 🏠 para volver al menú.",
     { capture: true },
     async (ctx, { state, fallBack, gotoFlow }) => {
-      if (ctx.body === "otros") {
+      if (ctx.body.toLowerCase() == "otros") {
         if (state.getMyState().medic.week === 1) {
           return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
         } else {
           return gotoFlow(giveDaysWhenMedicWorkSingle);
         }
       }
-      if (ctx.body === "menu") {
+      if (ctx.body.toLowerCase() == "menu") {
         return gotoFlow(menuFlow);
       }
 
@@ -38,14 +38,14 @@ export default addKeyword<Provider, Database>(utils.setEvent("GETINFORMATION_TOS
     "¿Cuál es tu apellido?\n\nEscribe *otros* 🔄 si deseas elegir otro horario.\n\nEscribe *menu* 🏠 para volver al menú.",
     { capture: true },
     async (ctx, { state, fallBack, gotoFlow }) => {
-      if (ctx.body === "otros") {
+      if (ctx.body.toLowerCase() == "otros") {
         if (state.getMyState().medic.week === 1) {
           return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
         } else {
           return gotoFlow(giveDaysWhenMedicWorkSingle);
         }
       }
-      if (ctx.body === "menu") {
+      if (ctx.body.toLowerCase() == "menu") {
         return gotoFlow(menuFlow);
       }
 
@@ -65,10 +65,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("GETINFORMATION_TOS
     "¿Cuál es tu DNI? 🆔 Esta información es importante si quieres cancelar o editar tu turno.\n\nEscribe *otros* 🔄 si deseas elegir otro horario.\n\nEscribe *menu* 🏠 para volver al menú.",
     { capture: true },
     async (ctx, { state, gotoFlow, fallBack }) => {
-      if (ctx.body === "menu") {
+      if (ctx.body.toLowerCase() == "menu") {
         return gotoFlow(menuFlow);
       }
-      if (ctx.body === "otros") {
+      if (ctx.body.toLowerCase() == "otros") {
         if (state.getMyState().medic.week === 1) {
           return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
         } else {

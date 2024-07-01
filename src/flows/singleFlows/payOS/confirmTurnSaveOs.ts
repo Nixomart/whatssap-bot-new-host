@@ -18,10 +18,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("CONFIRMTURN_SAVE_O
     const dataUpdated = await updateFirebaseData(medicData.uid);
     const customer = state.getMyState().patientFound;
     const turnoNew = state.getMyState().turnoNew
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(seeKindOfPayments);
     }
-    if (ctx.body == "estoy seguro") {
+    if (ctx.body.toLowerCase() == "estoy seguro") {
       console.log("ENTRA ACA GUARDAR TURNO NUEVO OS");
       const isAvailable = verifyTurns(
         medicData.hourChoosenTofirebase,
@@ -39,7 +39,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("CONFIRMTURN_SAVE_O
             customers: arrayUnion({...customer, os_name: turnoNew.os_name, os_number: turnoNew.os_number, observation:[], cancell: 0, ban:false, phone: ctx.from}),
           }).then(() => {
             console.log("SE GUARDO");
-            return endFlow(`tu turno se guardo, ahora espera a que el especialista confirme\n\nSi quieres volver al menu en cualquier momento escribe. *miturno ${medicData.consultName}*`);
+            return endFlow(`tu turno se guardo, ahora espera a que el especialista confirme\n\nEscribe *miturno ${medicData.consultName}* 🏠 para volver al menú.`)
           });
         } else {
           const nuevoCustomer = dataUpdated.customers.map((cus) => {
@@ -53,7 +53,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("CONFIRMTURN_SAVE_O
             turns: arrayUnion({...turnoNew, status: "OS_CUSTOMER_YES", idReserva: idReserva , create_at: dayjs().format("YYYY-MM-DDTHH:mm:ss"), specialist: medicData.name}),
             customers: nuevoCustomer,
           }).then(() => {
-            return endFlow(`tu turno se guardo, ahora espera a que el especialista confirme tu turno\n\nSi quieres volver al menu en cualquier momento escribe. *miturno ${medicData.consultName}*`);
+            return endFlow(`tu turno se guardo, ahora espera a que el especialista confirme tu turno\n\nEscribe *miturno ${medicData.consultName}* 🏠 para volver al menú.`);
           });
         }
       } else {
@@ -63,10 +63,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("CONFIRMTURN_SAVE_O
           return gotoFlow(giveQueryTypesSingle)
       }
     }
-    if (ctx.body == "datos" || ctx.body == "dato") {
+    if (ctx.body.toLowerCase() == "datos" || ctx.body.toLowerCase() == "dato") {
       return gotoFlow(getInformationOsSave);
     }
-    if (ctx.body == "menu" || ctx.body == "men") {
+    if (ctx.body.toLowerCase() == "menu" || ctx.body.toLowerCase() == "men") {
       return gotoFlow(menuFlow);
     }
   }

@@ -25,7 +25,7 @@ export default addKeyword<Provider, Database>(
   { capture: true },
   async (ctx, { state, flowDynamic, gotoFlow, endFlow }) => {
     const medicData = state.getMyState().medic;
-    /* if (ctx.body == "pagar") {
+    /* if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(payFlowCome)
     } */
     if (ctx.body.toLocaleLowerCase() == "si quiero") {
@@ -227,7 +227,8 @@ export default addKeyword<Provider, Database>(
           turnosFixedMaps.length > 0 ? "\n\n" + mensajeDeTurnos : ""
         } \n\nEscribe *${
           "mispagos" + " " + medicData.consultName
-        }* para pagar tus turnos.`
+        }* para pagar tus turnos.
+        \nSi deseas ver el menu principal, escribe *miturno ${medicData.consultName}*`
       );
       /* switch (turno.status) {
         case "TRANSFER_CUSTOMER_NO":

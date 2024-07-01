@@ -31,7 +31,7 @@ export default addKeyword<Provider, Database>(EVENTS.MEDIA).addAction(
             
             await saveInFirebaseTurn(medicData, localPath);
             return endFlow(
-              `🙌 ¡GRACIAS! Recibimos con éxito la foto. Esta será enviada al especialista con *toda tu información*. ¡Muchas gracias! 📸💼\n\nAquí están los detalles de tu turno:\n📍 Dirección: *qwoenqowe*\n👨‍⚕️ Especialista: *${turnoNew.specialist}*\n📅 Fecha: *${dayjs(turnoNew.start).format("dddd D, MMMM HH:mm a")}*\n👤 Nombre: *${turnoNew.customer.name + " " + turnoNew.customer.lastname}*\n🔍 DNI: *${turnoNew.customer.dni}*\n\n📱 El número de celular donde recibirás la confirmación: ${ctx.from}`
+              `🙌 ¡GRACIAS! Recibimos con éxito la foto. Esta será enviada al especialista con *toda tu información*. ¡Muchas gracias! 📸💼\n\nAquí están los detalles de tu turno:\n📍 Dirección: *qwoenqowe*\n👨‍⚕️ Especialista: *${turnoNew.specialist}*\n📅 Fecha: *${dayjs(turnoNew.start).format("dddd D, MMMM HH:mm a")}*\n👤 Nombre: *${turnoNew.customer.name + " " + turnoNew.customer.lastname}*\n🔍 DNI: *${turnoNew.customer.dni}*\n\n📱 El número de celular donde recibirás la confirmación: ${ctx.from}\nPara volver al menu en cualquier momento escribe *miturno ${medicData.consultName}*`
             );
           } else {
             return endFlow(

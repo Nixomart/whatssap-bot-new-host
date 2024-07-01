@@ -15,7 +15,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_PRESENTIA
     const customer = state.getMyState().patientFound;
     const turnoNew = state.getMyState().turnoNew;
     const precio = state.getMyState().price;
-    if (ctx.body == "estoy seguro") {
+    if (ctx.body.toLowerCase() == "estoy seguro") {
       const isAvailable = verifyTurns(
         medicData.hourChoosenTofirebase,
         dayjs(medicData.hourChoosenTofirebase)
@@ -33,7 +33,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_PRESENTIA
             turns: arrayUnion({...turnoNew, status: "PRESENTIAL_CUSTOMER_YES", idReserva: idReserva, create_at: dayjs().format("YYYY-MM-DDTHH:mm:ss"), specialist: medicData.name}),
             customers: arrayUnion({...customer, observation:[], cancell: 0, ban:false, phone: ctx.from, os_name: null, os_number: null}),
           }).then(() => {
-            return endFlow(`tu turno se guardo, ahora espera a que el especialista confirme el turno\n\nSi quieres volver al menu en cualquier momento escribe. *miturno ${medicData.consultName}*`);
+            return endFlow(`tu turno se guardo, ahora espera a que el especialista confirme el turno\n\nEscribe *miturno ${medicData.consultName}* 🏠 para volver al menú.`);
           });
         } else {
           const nuevoCustomer = dataUpdated.customers.map((cus) => {
@@ -47,7 +47,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_PRESENTIA
             customers: nuevoCustomer,
           }).then(() => {
             return endFlow(
-              `Tu turno Fue guardado con exito!. Ahora te toca esperar la confirmacion del turno de parte del especialista, el precio del turno es ${precio}\n\nSi quieres volver al menu en cualquier momento escribe. *miturno ${medicData.consultName}*`
+              `Tu turno Fue guardado con exito!. Ahora te toca esperar la confirmacion del turno de parte del especialista, el precio del turno es ${precio}\n\nEscribe *miturno ${medicData.consultName}* 🏠 para volver al menú.`
             );
           });
         }
@@ -58,10 +58,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_PRESENTIA
           return gotoFlow(giveQueryTypesSingle)
       }
     }
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(seeKindOfPayments);
     }
-    if (ctx.body == "menu" || ctx.body == "men") {
+    if (ctx.body.toLowerCase() == "menu" || ctx.body.toLowerCase() == "men") {
       return gotoFlow(menuFlow);
     }
   }

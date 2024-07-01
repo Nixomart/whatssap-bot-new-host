@@ -13,7 +13,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("CHOOSE_PAY")).addA
     const paymentChoosen = state.getMyState().paymentChooseBeforeSave;
     const medicData = state.getMyState().medic;
 
-    if (ctx.body == "estoy seguro") {
+    if (ctx.body.toLowerCase() == "estoy seguro") {
       switch (paymentChoosen[0].type) {
         case "os":
           const patientFound = state.getMyState().patientFound

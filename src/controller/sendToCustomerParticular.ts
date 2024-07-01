@@ -1,21 +1,19 @@
+import { ApiResponse } from "~/dto/ApiResponse.js";
 import provider from "../provider/provider.js";
-export const sendToCustomerParticular = async (req, res) => {
+export const sendToCustomerParticular = async (bot,req, res) => {
   const { turnToSendCustomer } = req.body;
   try {
-    const id = `${turnToSendCustomer.phone}@c.us`;
-    let templateMessage;
+    const number = `${turnToSendCustomer.phone}`;
+    let message;
     if (turnToSendCustomer.fixed === true) {
-      templateMessage = {
-        text: `🔵🔵*TURNO CONFIRMADO*🔵🔵 🧨 \n\n💢💢 Estimado/a, *${
+      message = `🔵🔵*TURNO CONFIRMADO*🔵🔵 🧨 \n\n💢💢 Estimado/a, *${
           turnToSendCustomer.nameLastname
         }*.  💢💢 \n\n🟢Tienes un turno *RECURRENTE* con: *${
           turnToSendCustomer.newTurn.specialist
         }* \n 📅Los dias: *${turnToSendCustomer.date}* \n 📍Lugar: *${
           turnToSendCustomer.address
-        }*\n Mensaje del Especialista: *${
-          turnToSendCustomer.message === null
-            ? "Sin mensaje"
-            : `*${turnToSendCustomer.message}*`
+        }*\n *Mensaje del Especialista: *${
+          turnToSendCustomer.message
         }*\n\n*METODO DE PAGO*\n ${turnToSendCustomer.newTurn.paymentMethod
           .map(
             (pay, index) =>
@@ -31,22 +29,17 @@ export const sendToCustomerParticular = async (req, res) => {
           turnToSendCustomer.date
         } TIENES UN TURNO, ESCRIBE "mispagos ${
           turnToSendCustomer.name
-        }" PARA VER QUE TURNOS TIENES A PAGAR*`,
-        footer: "Sistema: pedirturno.online",
-      };
+        }" PARA VER QUE TURNOS TIENES A PAGAR*`
     } else {
-      templateMessage = {
-        text: `🔵🔵*TURNO CONFIRMADO*🔵🔵 🧨 \n\n💢💢 Estimado/a, *${
+      message =  `🔵🔵*TURNO CONFIRMADO*🔵🔵 🧨 \n\n💢💢 Estimado/a, *${
           turnToSendCustomer.nameLastname
         }*.  💢💢 \n\n🟢Tienes turno con: *${
           turnToSendCustomer.newTurn.specialist
         }* \n 📅El dia: *${turnToSendCustomer.date}* \n 📍Lugar: *${
           turnToSendCustomer.address
-        }*\n Mensaje del Especialista: *${
-          turnToSendCustomer.message === null
-            ? "Sin mensaje"
-            : `*${turnToSendCustomer.message}*`
-        }*\n\n*METODO DE PAGO*\n ${turnToSendCustomer.newTurn.paymentMethod
+        }*\n *Mensaje del Especialista:* *${
+          turnToSendCustomer.message
+    }*\n\n*METODO DE PAGO*\n ${turnToSendCustomer.newTurn.paymentMethod
           .map(
             (pay, index) =>
               `${
@@ -59,14 +52,24 @@ export const sendToCustomerParticular = async (req, res) => {
           )
           .join("\n")}\n\n *ESCRIBE "mispagos ${
           turnToSendCustomer.name
-        }" PARA VER QUE TURNOS TIENES A PAGAR*`,
-        footer: "Sistema: pedirturno.online",
-      };
+        }" PARA VER QUE TURNOS TIENES A PAGAR*`
     }
-    await provider.sendMessage(id, templateMessage, {});
-    res.send({ data: "enviado!" });
+    const response: ApiResponse<string> = {
+      message: "send turn to customer particular",
+      status: "success",
+      status_code: 200,
+      data: null,
+    };
+    await bot.sendMessage(number, message, {});
+    res.end(JSON.stringify(response));
   } catch (error) {
+    const response: ApiResponse<string> = {
+      message: error.message,
+      status: "error",
+      status_code: 500,
+      data: null,
+    };
     console.log("ERROR AL ENVIAR TURNO CONFIRMADO MEDIANTE ESTE DOCKER: ", error);
-    res.send({ data: "No se pudo enviar mensaje" });
+    res.end(JSON.stringify(response));
   }
 };

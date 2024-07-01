@@ -11,7 +11,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("CHOOSE_OS_TO_PAY")
   { capture: true },
   async (ctx, { state, fallBack, gotoFlow, flowDynamic }) => {
     const osList = state.getMyState().listOss;
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(listPaymentMethods);
     }
     if (osList[ctx.body] === undefined) {

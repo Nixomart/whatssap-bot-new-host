@@ -17,7 +17,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDATA_TOPAYWITH
     const turnoNew = state.getMyState().turnoNew;
     const precio = state.getMyState().price;
 
-    if (ctx.body == "estoy seguro") {
+    if (ctx.body.toLowerCase() == "estoy seguro") {
       const idReserva = state.getMyState().idReservacion;
 
       const dataTransfer = medicData.paymentMethods.find(
@@ -53,7 +53,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDATA_TOPAYWITH
             }),
           }).then(() => {
             return endFlow(
-              `tu turno se guardo, ahora espera a que el especialista confirme el turno\n\nSi quieres volver al menu en cualquier momento escribe. *miturno ${medicData.consultName}*`
+              `tu turno se guardo, ahora espera a que el especialista confirme el turno\n\nEscribe *miturno ${medicData.consultName}* 🏠 para volver al menú.`
             );
           });
         } else {
@@ -86,10 +86,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDATA_TOPAYWITH
           return gotoFlow(giveQueryTypesSingle)
       }
     }
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(seeKindOfPayments);
     }
-    if (ctx.body == "menu" || ctx.body == "men") {
+    if (ctx.body.toLowerCase() == "menu" || ctx.body.toLowerCase() == "men") {
       return gotoFlow(menuFlow);
     }
   }

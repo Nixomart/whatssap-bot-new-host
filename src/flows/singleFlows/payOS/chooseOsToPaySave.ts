@@ -12,7 +12,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("CHOOSE_OSTOPAY_SAV
     const turno = state.getMyState().turnoNew
     const medicData2 = state.getMyState().medic
         const osList = state.getMyState().listOss;
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(seeKindOfPayments);
     }
     if (osList[ctx.body] === undefined) {

@@ -17,8 +17,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("EDIT_TURN_WELCOME"
     const turnIndex = medicData.turns
       .filter(
         (turn) =>
-          turn.dni === ctx.body ||
-          (turn.from == ctx.from && dayjs().isBefore(dayjs(turn.start))) && turn.fixed == false
+          (turn.customer.phone == ctx.from && dayjs().isBefore(dayjs(turn.start))) && turn.fixed == false
       )
       .map((turn, index) => index);
       

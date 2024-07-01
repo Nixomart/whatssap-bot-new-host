@@ -14,16 +14,16 @@ export default addKeyword<Provider, Database>(utils.setEvent("ISAGREE_TOSAVE_OSP
   async (ctx, { state, fallBack, gotoFlow, flowDynamic, endFlow }) => {
     const medicData = state.getMyState().medic;
     const datanueva = await updateFirebaseData(medicData.uid);
-    if (ctx.body == "menu") {
+    if (ctx.body.toLowerCase() == "menu") {
       return gotoFlow(menuFlow);
     }
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(listPaymentMethods);
     }
-    if (ctx.body == "datos" || ctx.body == "dato") {
+    if (ctx.body.toLowerCase() == "datos" || ctx.body.toLowerCase() == "dato") {
       return gotoFlow(GetInformationOS);
     }
-    if (ctx.body == "estoy seguro") {
+    if (ctx.body.toLowerCase() == "estoy seguro") {
       /* GUARDARRRR */
       const docRef = doc(db, "consults", medicData.uid);
       const turnoupdated = state.getMyState().turnoChoosen;

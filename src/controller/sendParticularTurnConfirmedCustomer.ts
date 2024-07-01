@@ -1,6 +1,7 @@
 import axios from "axios";
+import { ApiResponse } from "~/dto/ApiResponse";
 /* SEND PARTICULAR DOCKER CONFIRMED TURN */
-export const sendParticularTurnConfirmedCustomer = async (req, res) => {
+export const sendParticularTurnConfirmedCustomer = async (bot,req, res) => {
   const { document } = req.params;
 
   try {
@@ -18,12 +19,18 @@ export const sendParticularTurnConfirmedCustomer = async (req, res) => {
       "ENVIA A CUSTOMER PARTICULAR, RAPIDO: /send-messageCustomer"
     );
         */
-    res.send(response.data);
+    res.end(JSON.stringify(response.data));
   } catch (error) {
     console.log(
       `ERROR AL ENVIAR TURNO CONFIRMADO MEDIANTE DOCKER PARTICULAR: http://${document}:4000/send-messageCustomer/confirmed `,
       error
     );
-    res.send({ data: "No se pudo enviar mensaje" });
+    const response: ApiResponse<string> = {
+      message: "error to send message particular turn confirmed",
+      status: "error",
+      status_code: 500,
+      data: null,
+    };
+    res.end(JSON.stringify(response));
   }
 };

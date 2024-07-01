@@ -15,10 +15,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("DATA_TOTRANSFER_CO
     const statuscome = state.getMyState().statuscome;
     const turnoNew = state.getMyState().turnoNew;
     
-    if (ctx.body == "menu") {
+    if (ctx.body.toLowerCase() == "menu") {
       return gotoFlow(menuFlow);
     }
-    if (ctx.body == "estoy seguro") {
+    if (ctx.body.toLowerCase() == "estoy seguro") {
       const docRef = doc(db, "consults", medicData.uid);
       const turnsUpdated = dataUpdated.turns.map((turn) => {
         if (turn.id === turnoNew.id) {
@@ -50,10 +50,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("DATA_TOTRANSFER_CO
         ]);
       });
     }
-    if (ctx.body == "pagar") {
+    if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(listPaymentMethods);
     }
-    if (ctx.body == "menu" || ctx.body == "men") {
+    if (ctx.body.toLowerCase() == "menu" || ctx.body.toLowerCase() == "men") {
       return gotoFlow(menuFlow);
     }
   }

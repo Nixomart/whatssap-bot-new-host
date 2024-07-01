@@ -18,7 +18,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("IS_AGREE_TO_PAY"))
     const paymentChoosen = state.getMyState().paymentChooseBeforeSave;
     const medicData = state.getMyState().medic;
 
-    if (ctx.body == "estoy seguro") {
+    if (ctx.body.toLowerCase() == "estoy seguro") {
       switch (paymentChoosen[0]) {
         case "os":
           const hasOsCsutomer = medicData.customers.find(

@@ -326,7 +326,9 @@ export default addKeyword<Provider, Database>(utils.setEvent("PAY_FLOW_COME"))
           return endFlow(
             `📅 Tienes turnos registrados!. Aquí están los detalles:\n\n${mensajeDeTurnos} \n\nSi tienes mas turnos, y no aparecen. Escribe mañana de nuevo *${
               "mispagos " + medicData.consultName
-            }*`
+            }*
+            \nSi deseas ver el menu principal, escribe *miturno ${medicData.consultName}*
+            `
           );
         }
         if (turno === undefined) {

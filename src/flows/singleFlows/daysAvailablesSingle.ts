@@ -17,21 +17,21 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
       medic: { ...medicData, chosenDay: parseInt(ctx.body) },
     });
     medicData = state.getMyState().medic;
-    if (ctx.body == "consulta") return gotoFlow(giveQueryTypesSingle);
+    if (ctx.body.toLowerCase() == "consulta") return gotoFlow(giveQueryTypesSingle);
     if (
-      ctx.body == "si quiero" ||
-      ctx.body == "quiero" ||
-      ctx.body == "siquiero" ||
-      ctx.body == "si"
+      ctx.body.toLowerCase() == "si quiero" ||
+      ctx.body.toLowerCase() == "quiero" ||
+      ctx.body.toLowerCase() == "siquiero" ||
+      ctx.body.toLowerCase() == "si"
     ) {
       return gotoFlow(menuFlow);
     }
-    if (ctx.body == "menu") {
+    if (ctx.body.toLowerCase() == "menu") {
       return gotoFlow(menuFlow);
     }
 
     if (medicData.turnsZeroThisWeek) {
-      if (ctx.body == "proxima") {
+      if (ctx.body.toLowerCase() == "proxima") {
         await state.update({
           medic: {
             ...medicData,
@@ -44,7 +44,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
         return gotoFlow(giveDaysWhenMedicWorkSingle);
       }
     } else {
-      if (ctx.body == "proxima") {
+      if (ctx.body.toLowerCase() == "proxima") {
         await state.update({
           medic: {
             ...medicData,
@@ -54,9 +54,9 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
         });
         return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
       }
-      if (ctx.body == "actual") {
+      if (ctx.body.toLowerCase() == "actual") {
         return gotoFlow(giveDaysWhenMedicWorkSingle);
-      } else if (ctx.body == "consulta") {
+      } else if (ctx.body.toLowerCase() == "consulta") {
         return gotoFlow(giveQueryTypesSingle);
       }
       const optionChoosen = medicData.chosenDay;

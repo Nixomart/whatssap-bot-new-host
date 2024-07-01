@@ -12,16 +12,16 @@ import { db } from "~/firebase/firebase.js";
 export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_TOFIREBASE")).addAction(
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, state, endFlow }) => {
-    if (ctx.body === "menu") {
+    if (ctx.body.toLowerCase() == "menu") {
       return gotoFlow(menuFlow);
     }
     if (state.getMyState().action === 1) {
       if (
-        ctx.body === "estoy seguro" ||
-        ctx.body === "si" ||
-        ctx.body === "de acuerdo" ||
-        ctx.body === "estoy acuerdo" ||
-        ctx.body === "estoy de acuerdo"
+        ctx.body.toLowerCase() == "estoy seguro" ||
+        ctx.body.toLowerCase() == "si" ||
+        ctx.body.toLowerCase() == "de acuerdo" ||
+        ctx.body.toLowerCase() == "estoy acuerdo" ||
+        ctx.body.toLowerCase() == "estoy de acuerdo"
       ) {
         const medicData = state.getMyState().medic;
         const docRef = doc(db, "consults", medicData.uid);
@@ -65,16 +65,16 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_TOFIREBAS
         return gotoFlow(isAgreeToSave);
       }
     } else {
-      if (ctx.body === "otro" || ctx.body === "otros" || ctx.body === "otr") {
+      if (ctx.body.toLowerCase() == "otro" || ctx.body.toLowerCase() == "otros" || ctx.body.toLowerCase() == "otr") {
         if (state.getMyState().medic.week === 1) {
           return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
         } else {
           return gotoFlow(giveDaysWhenMedicWorkSingle);
         }
       } else if (
-        ctx.body === "datos" ||
-        ctx.body === "dato" ||
-        ctx.body === "dat"
+        ctx.body.toLowerCase() == "datos" ||
+        ctx.body.toLowerCase() == "dato" ||
+        ctx.body.toLowerCase() == "dat"
       ) {
         return gotoFlow(getInformationToSave);
       } else {

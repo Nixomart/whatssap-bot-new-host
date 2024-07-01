@@ -1,7 +1,7 @@
 import { collection, getDocs } from "firebase/firestore";
 import dayjs from "dayjs";
-import provider from "../provider/provider.js";
 import { db } from "~/firebase/firebase.js";
+import provider from "~/provider/provider";
 export const sendMessageCron = async () => {
   try {
     const q = collection(db, "consults");
@@ -51,9 +51,8 @@ export const sendMessageCron = async () => {
       })
       .map((turn) => {
         return {
-          id: turn.profile.type == 0 ? `549${turn.customer.phone}@c.us` : `${turn.customer.phone}@c.us`,
-          templateMessage: {
-            text: `🔵🔵*Este mensaje es un recordatorio de turnos proviente del Sistema PedirTurno.Online*🔵🔵 
+          number: turn.profile.type == 0 ? `549${turn.customer.phone}` : `${turn.customer.phone}`,
+          message:  `🔵🔵*Este mensaje es un recordatorio de turnos proviente del Sistema PedirTurno.Online*🔵🔵 
               \n\n 🧨*Este es un mensaje automatico, no respondas a esta conversacion, cualquier consulta haz con el numero del consultorio 📞📞 ${
                 turn.profile.socialNetwork.whatssap === null
                   ? turn.profile.socialNetwork.address
@@ -71,17 +70,14 @@ export const sendMessageCron = async () => {
               )}* 
               ${turn.profile.type == 0 ? `\n 📍Lugar: * ${turn.profile.consultName}*`: ""}
               \n 🏣Dirección: *${turn.profile.address}* `,
-            footer: "Sistema: PedirTurno.online",
-          },
+          
         };
       });
       
-    const abc = await provider.getInstance();
     nextDayTurns.forEach(async (turn, index) => {
-     /*  setTimeout(async () => {
-        console.log("ENVIA DE A UNO QUE FUE: ", turn.id);
-        await abc.sendMessage(turn.id, turn.templateMessage);
-      }, index * 2 * 60 * 1000); */
+      setTimeout(async () => {
+        await provider.sendMessage(turn.number, turn.message);
+      }, index * 2 * 60 * 1000);
     });
   } catch (error) {
     console.log("error cron envio de mensaje: ", error);

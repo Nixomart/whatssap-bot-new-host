@@ -14,9 +14,8 @@ export const sendMessageCronParticular = async (data) => {
       })
       .map((turn) => {
         return {
-          id: `549${turn.customer.phone}@c.us`,
-          templateMessage: {
-            text: `🔵🔵*Este mensaje es un recordatorio de turnos proviente del Sistema PedirTurno.Online*🔵🔵 
+          number: `549${turn.customer.phone}`,
+          message: `🔵🔵*Este mensaje es un recordatorio de turnos proviente del Sistema PedirTurno.Online*🔵🔵 
                   \n\n 🧨*Este es un mensaje automatico, no respondas a esta conversacion, cualquier consulta haz con el numero del consultorio 📞📞 ${
                     turn.profile.socialNetwork.whatssap === null
                       ? turn.profile.socialNetwork.address
@@ -32,8 +31,6 @@ export const sendMessageCronParticular = async (data) => {
                   )}* 
                   \n 📍Lugar: *${turn.profile.consultName}*
                   \n 🏣Dirección: *${turn.profile.address}* `,
-            footer: "Sistema: PedirTurno.online",
-          },
         };
       });
     const abc = await provider.getInstance();

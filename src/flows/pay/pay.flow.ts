@@ -20,7 +20,7 @@ import { MemoryDB as Database, addKeyword, utils } from "@builderbot/bot";
 import { db } from "~/firebase/firebase.js";
 dayjs.extend(isSameOrAfter);
 
-export default addKeyword<Provider, Database>("mispagos", { sensitive: true })
+export default addKeyword<Provider, Database>(["mispagos","Mipago", "Mispagos"], { sensitive: true })
   .addAnswer("...⏱")
   .addAction(async (ctx, { flowDynamic, endFlow, state, gotoFlow }) => {
     const medicosplit = ctx.body.split(" ");
@@ -391,9 +391,12 @@ export default addKeyword<Provider, Database>("mispagos", { sensitive: true })
               .join("\n\n");
 
             return endFlow(
-              `📅 Tienes turnos registrados!. Aquí están los detalles:\n\n${mensajeDeTurnos} \n\nSi tienes mas turnos, y no aparecen. Escribe mañana de nuevo *${
+              `📅 Tienes turnos registrados!. Aquí están los detalles:\n\n${mensajeDeTurnos} 
+              \n\nSi tienes mas turnos, y no aparecen. 
+              Escribe mañana de nuevo *${
                 "mispagos " + medicData.consultName
-              }*`
+              }*
+              \nSi deseas ver el menu principal, escribe *miturno ${medicData.consultName}*`
             );
           }
           if (turno === undefined) {
@@ -476,7 +479,7 @@ export default addKeyword<Provider, Database>("mispagos", { sensitive: true })
                         .set("hour", parseInt(turno.startTime.split(":")[0]))
                         .set("minute", parseInt(turno.startTime.split(":")[1]))
                         .format("dddd [a las] hh:mm A")
-                }  *CONFIRMADO*`
+                } *CONFIRMADO*`
               );
             case "TRANSFER_CUSTOMER_YES":
               return endFlow(
