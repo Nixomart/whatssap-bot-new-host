@@ -26,7 +26,7 @@ export const sendParticularTurnConfirmedCustomer = async (bot,req, res) => {
       error
     );
     const response: ApiResponse<string> = {
-      message: "error to send message particular turn confirmed",
+      message: "error to send message particular turn confirmed error from DOCKER MAIN : "+error.message,
       status: "error",
       status_code: 500,
       data: null,

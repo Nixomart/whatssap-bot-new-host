@@ -18,7 +18,7 @@ export const controlMessageParticular = async (bot, req, res) => {
       error
     );
     const response: ApiResponse<string> = {
-      message: "error to send message particular",
+      message: "error to send message particular error from DOCKER MAIN : " + error.message,
       status: "error",
       status_code: 500,
       data: null,

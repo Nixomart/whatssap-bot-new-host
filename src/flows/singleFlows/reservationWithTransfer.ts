@@ -20,7 +20,7 @@ export default addKeyword<Provider, Database>(EVENTS.MEDIA).addAction(
 
       if (
         (data !== undefined && state.getMyState().hasOwnProperty("turnoNew")) ||
-        (data.hasOwnProperty("resend") && data.resend)
+        (data !== undefined && data.hasOwnProperty("resend") && data.resend)
       ) {
         if (state.getMyState().turnoNew.paymentMethod.includes("transfer")) {
           const turnoNew = state.getMyState().turnoNew;
@@ -36,7 +36,7 @@ export default addKeyword<Provider, Database>(EVENTS.MEDIA).addAction(
             const localPath = await provider.saveFile(ctx, { path: `./` });
             console.log("LOCALPATH: ", localPath);
 
-            await saveInFirebaseTurn(medicData, localPath);
+            await saveInFirebaseTurn(medicData, localPath, turnoNew.id);
             return endFlow(
               `🙌 ¡GRACIAS! Recibimos con éxito la foto. Esta será enviada al especialista con *toda tu información*. ¡Muchas gracias! 📸💼\n\nAquí están los detalles de tu turno:\n📍 Dirección: *qwoenqowe*\n👨‍⚕️ Especialista: *${
                 medicData.name

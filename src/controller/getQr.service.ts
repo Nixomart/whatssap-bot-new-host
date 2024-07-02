@@ -9,6 +9,6 @@ export const getQr = (req, res: Response) => {
       return;
     }
     res.contentType("image/png");
-    res.send(data);
+    res.end(data);
   });
 };

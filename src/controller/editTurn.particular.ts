@@ -10,10 +10,10 @@ export const editTurnParticular = async (bot, req, res) => {
       `http://${turnToSendCustomer.uid}:4000/edit-turn`, {turnToSendCustomer}
     );
     console.log("RESPONSE DE ENVIAR a particular: ",response);
-    res.end( response.data );
+    res.end(JSON.stringify(response.data));
   } catch (error) {
     const response:ApiResponse<string> = {
-      message: "error to send message particular edit turn",
+      message: "error to send message particular edit turn error from DOCKER MAIN : "+ error.message,
       status: "error",
       status_code: 500,
       data: null,

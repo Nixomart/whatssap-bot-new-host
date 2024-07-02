@@ -9,14 +9,14 @@ export const cancelTurnSendParticular = async (bot, req, res) => {
     );
     console.log("RESPONSE DE ENVIAR a particular: ", response);
 
-    res.end(response.data);
+    res.end(JSON.stringify(response.data));
   } catch (error) {
     console.log(
       `ERROR AL ENVIAR TURNO CANCELADO MEDIANTE DOCKER PARTICULAR: http://${turnToSendCustomer.uid}:4000/cancel-turn `,
       error
     );
     const response: ApiResponse<string> = {
-      message: "error to send message particular cancel turn",
+      message: "error to send message particular cancel turn error from DOCKER MAIN : " + error.message,
       status: "error",
       status_code: 500,
       data: null,

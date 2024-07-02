@@ -427,7 +427,7 @@ export default addKeyword<Provider, Database>(["mispagos","Mipago", "Mispagos"],
               await state.update({ statuscome: "TRANSFER_MEDIC_NO" });
               return await flowDynamic([
                 {
-                  body: `Ya tienes un turno registrado para el dia \n\n * ${
+                  body: `Ya tienes un turno registrado para el dia \n\n *${
                     turnoNew.fixed == false
                       ? dayjs(turno.start).format("dddd D, MMMM HH:mm a")
                       : dayjs()
@@ -450,7 +450,7 @@ export default addKeyword<Provider, Database>(["mispagos","Mipago", "Mispagos"],
               await state.update({ statuscome: "TRANSFER_MEDIC_NO" });
               return await flowDynamic([
                 {
-                  body: `Ya tienes un turno registrado para el dia \n\n * ${
+                  body: `Ya tienes un turno registrado para el dia \n\n *${
                     turnoNew.fixed == false
                       ? dayjs(turno.start).format("dddd D, MMMM HH:mm a")
                       : dayjs()

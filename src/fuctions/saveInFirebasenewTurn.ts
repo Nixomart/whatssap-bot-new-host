@@ -5,7 +5,7 @@ import fs from "fs";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { File } from "buffer";
 import firebaseApp, { db } from "~/firebase/firebase";
-export const saveInFirebaseTurn = async (medicData, localPath:string) => {
+export const saveInFirebaseTurn = async (medicData, localPath:string, id) => {
   fs.readFile(localPath, async (err, data) => {
     if (err) {
       console.error("Error al leer el archivo:", err);
@@ -16,13 +16,13 @@ export const saveInFirebaseTurn = async (medicData, localPath:string) => {
     const file = new File([data], "image.jpeg", { type: "image/jpeg" });
     const fileRef = ref(
       storage,
-      `${medicData.uid}/turnos/paymentConfirmation/${medicData.turnId}`
+      `${medicData.uid}/turnos/paymentConfirmation/${id}`
     );
 
     await uploadBytes(fileRef, file);
     const downloadURL = await getDownloadURL(fileRef);
     const turnsToUpdate = medicData.turns.map((turn) => {
-      if (turn.id === medicData.turnId) {
+      if (turn.id === id) {
         return {
           ...turn,  
           imageConfirmation: downloadURL,
