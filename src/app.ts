@@ -1,4 +1,4 @@
-import { createBot,  createFlow } from "@builderbot/bot";
+import { createBot, createFlow, utils } from "@builderbot/bot";
 import fs from "fs";
 import { MemoryDB as Database } from "@builderbot/bot";
 import dayjs from "dayjs";
@@ -19,15 +19,16 @@ import { sendToCustomerParticular } from "./controller/sendToCustomerParticular"
 import { sendTurnCustomerToPay } from "./controller/sendTurnCustomerToPay";
 import { cancelTurnSend } from "./controller/cancelTurnSend";
 import { editTurnMessage } from "./controller/editTurnMessage";
-import cron from "node-cron"
+import cron from "node-cron";
 import { cleanFolders } from "./fuctions/cleanFolders";
 import { sendMessageCron } from "./controller/sendMessageCron.service";
 import indexFlow from "./flows/index.flow";
+import cors from "cors";
 dayjs.locale("es");
 const PORT = process.env.PORT ?? 4000;
 const main = async () => {
   const adapterDB = new Database();
-
+  provider.server.use(cors({ origin: "*" }));
   const { handleCtx, httpServer } = await createBot({
     /* flow: createFlow([]), */
     flow: indexFlow,
@@ -37,10 +38,41 @@ const main = async () => {
   cron.schedule("00 17 * * *  ", async () => {
     await sendMessageCron();
   });
+
   provider.server.post(
     "/send-message-provider",
     handleCtx(async (bot, req, res) => {
       await sendMessage(bot, req, res);
+    })
+  );
+  provider.server.get(
+    "/sender",
+    handleCtx(async (bot, req, res) => {
+      try {
+        const messages = [
+          { number: "5493885033205", message: "0" },
+          { number: "5493885033205", message: "1" },
+          { number: "5493885033205", message: "2" },
+          { number: "5493885033205", message: "3" },
+          { number: "5493885033205", message: "4" },
+          { number: "5493885033205", message: "5" },
+          { number: "5493885033205", message: "6" },
+        ];
+        
+        for(const person of messages){
+          console.log(
+            "envio de mensaje prueba: ",
+            person.number,
+            " mensaje: ",
+            person.message
+          );
+          await bot.sendMessage(person.number, person.message, {});
+          await utils.delay(3000);
+        }
+        res.end(JSON.stringify({ message: `send mensages ` }));
+      } catch (error) {
+        res.end(JSON.stringify({ message: "error send", error: error }));
+      }
     })
   );
   /* envia ahora mismo, este envia al customer */
@@ -54,6 +86,13 @@ const main = async () => {
     "/createBot/:doc",
     handleCtx(async (bot, req, res) => {
       await createBotDocker(bot, req, res);
+    })
+  );
+  provider.server.get(
+    "/errorintent",
+    handleCtx(async (bot, req, res) => {
+      throw new Error("Intentional Error for Testing");
+      res.end(JSON.stringify({ message: "error" }));
     })
   );
   provider.server.get(

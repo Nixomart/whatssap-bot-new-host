@@ -2,6 +2,7 @@ import { collection, getDocs } from "firebase/firestore";
 import dayjs from "dayjs";
 import { db } from "~/firebase/firebase.js";
 import provider from "~/provider/provider";
+import { utils } from "@builderbot/bot";
 export const sendMessageCron = async () => {
   try {
     const q = collection(db, "consults");
@@ -73,12 +74,11 @@ export const sendMessageCron = async () => {
           
         };
       });
-      
-    nextDayTurns.forEach(async (turn, index) => {
-      setTimeout(async () => {
-        await provider.sendMessage(turn.number, turn.message);
-      }, index * 2 * 60 * 1000);
-    });
+    
+    for(const turn of nextDayTurns){
+      await provider.sendMessage(turn.number, turn.message, {});
+      await utils.delay(7000)
+    }
   } catch (error) {
     console.log("error cron envio de mensaje: ", error);
   }
