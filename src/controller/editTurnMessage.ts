@@ -25,7 +25,8 @@ export const editTurnMessage = async (bot,req, res) => {
     📝 *Mensaje del especialista*: *${turnToSendCustomer.message}*\n\n
     Te pedimos disculpas por cualquier inconveniente que esto pueda causar y agradecemos tu comprensión. Estamos a tu disposición para cualquier consulta que puedas tener.`
     }
-
+    console.log("editado ", id);
+    
     await bot.sendMessage(id, message, {});
     const response: ApiResponse<string> = {
       message: "send message edit turn",

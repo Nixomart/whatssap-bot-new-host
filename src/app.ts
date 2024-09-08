@@ -89,11 +89,13 @@ const main = async () => {
     })
   );
   provider.server.get(
-    "/errorintent",
-    handleCtx(async (bot, req, res) => {
+    "/errorintent", ()=>{
+      throw new Error("Intentional Error for Testing");
+    }
+    /* handleCtx(async (bot, req, res) => {
       throw new Error("Intentional Error for Testing");
       res.end(JSON.stringify({ message: "error" }));
-    })
+    }) */
   );
   provider.server.get(
     "/getqr/:port/:uid",

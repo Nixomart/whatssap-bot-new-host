@@ -24,6 +24,8 @@ export const cancelTurnSend = async (bot,req, res) => {
         }*\n\n*Mensaje del especialista:* ${turnToSendCustomer.message}`
       }
     await bot.sendMessage(number, message , {});
+    console.log("cancelado ", number);
+    
     const reponse : ApiResponse<string> = {
       message: "send turn cancel message to customer",
       status: "success",

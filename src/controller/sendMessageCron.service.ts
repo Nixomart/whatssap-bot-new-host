@@ -17,7 +17,6 @@ export const sendMessageCron = async () => {
         ownBotParticular: Object.prototype.hasOwnProperty.call(data, "ownBot") ? data.ownBot : null,
       };
       const turns = data.turns;
-      console.log("DATA TYPE: ", data.type);
 
       const turnsWithProfile = turns.map((turn) => ({ ...turn, profile }));
 
@@ -74,8 +73,8 @@ export const sendMessageCron = async () => {
           
         };
       });
-    
-    for(const turn of nextDayTurns){
+      for(const turn of nextDayTurns){
+      console.log("ENVIO DE MENSAJE CRON BOT HOST, MENSAJE PARA: ", turn.number, " HORA: ", dayjs().format("dddd D MMMM, hh:mm a")  );
       await provider.sendMessage(turn.number, turn.message, {});
       await utils.delay(7000)
     }
