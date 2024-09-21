@@ -13,7 +13,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("MENU_FLOW")).addAc
       await state.update({medic: data})
       const medicData = state.getMyState().medic;
         await flowDynamic(
-          `*¡Hola!* 🌟\n ${medicData.about} 😊\n\nEspecialista: *${medicData.name}*, \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\nSi quieres cancelar un turno. Escribe *cancelar*. \nPara cambiar la fecha de un turno. Escribe *editar*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
+          `*¡Hola!* 🌟\n ${medicData.about} 😊\n\nProfesional: *${medicData.name}*, \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\nSi quieres cancelar un turno. Escribe *cancelar*. \nPara cambiar la fecha de un turno. Escribe *editar*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
         )
         return gotoFlow(welcomeFlow)
     } else {

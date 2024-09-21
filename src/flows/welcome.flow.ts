@@ -29,6 +29,7 @@ export default addKeyword<Provider, Database>(
       return gotoFlow(payFlowCome)
     } */
     if (ctx.body.toLocaleLowerCase() == "si quiero") {
+      
       const medicData = state.getMyState().medic;
       const turnosWithouFixed = medicData.turns
         .filter(
@@ -57,6 +58,8 @@ export default addKeyword<Provider, Database>(
         };
       });
       if (turnosWithouFixed.length === 0 && turnosFixedMaps.length === 0) {
+      console.log("ENTRA POR ACA ?? VA A DAR LOS TIPOS DE TURNOS");
+
          return gotoFlow(giveQueryTypesSingle);
       }
       let mensajeDeTurnos;
@@ -148,7 +151,7 @@ export default addKeyword<Provider, Database>(
               case "TRANSFER_CUSTOMER_YES":
                 return `Tienes un turno recurrente para ${
                   turno.week == 0 ? "este" : "el proximo"
-                } *${fechaFormateada}* Haz pagado este turno. *Espera a que el especialista confirme la transferencia.*`;
+                } *${fechaFormateada}* Haz pagado este turno. *Espera a que el Profesional confirme la transferencia.*`;
               case "TURNO_CONFIRMED":
                 return `Tienes un turno recurrente para ${
                   turno.week == 0 ? "este" : "el proximo"
@@ -242,7 +245,7 @@ export default addKeyword<Provider, Database>(
               )}\nPero aún no has enviado la foto de confirmación de la transferencia. Por favor, envíala ahora mismo siguiendo las instrucciones anteriores.\n\n*Recuerda que solo se acepta una foto como confirmación.*`,
             },
             {
-              body: `Bien. Aquí tienes los datos para realizar la transferencia al especialista:\n\n💳 CBU: ${dataTransfer.cbu}\n🏷️ ALIAS: ${dataTransfer.alias}\n👤 NOMBRE: ${dataTransfer.name}\n\n💰 VALOR DE LA CONSULTA: *${turno.price}*\n\nPor favor, envía una foto de la transferencia siguiendo el ejemplo proporcionado. Si tienes mas turnos, confirma este para confirmar los demas`,
+              body: `Bien. Aquí tienes los datos para realizar la transferencia al Profesional:\n\n💳 CBU: ${dataTransfer.cbu}\n🏷️ ALIAS: ${dataTransfer.alias}\n👤 NOMBRE: ${dataTransfer.name}\n\n💰 VALOR DE LA CONSULTA: *${turno.price}*\n\nPor favor, envía una foto de la transferencia siguiendo el ejemplo proporcionado. Si tienes mas turnos, confirma este para confirmar los demas`,
               media:
                 "https://firebasestorage.googleapis.com/v0/b/calendar-dashboard-df06c.appspot.com/o/default%2FHeading.png?alt=media&token=4714f1cb-274a-4cc9-b6ad-5af9caa2f364",
             },
@@ -307,7 +310,7 @@ export default addKeyword<Provider, Database>(
               )}\nPero aún no has enviado la foto de confirmación de la transferencia. Por favor, envíala ahora mismo siguiendo las instrucciones anteriores.\n\n*Recuerda que solo se acepta una foto como confirmación.*`,
             },
             {
-              body: `Bien. Aquí tienes los datos para realizar la transferencia al especialista:\n\n💳 CBU: ${dataTransfer.cbu}\n🏷️ ALIAS: ${dataTransfer.alias}\n👤 NOMBRE: ${dataTransfer.name}\n\n💰 VALOR DE LA CONSULTA: *${turno.price}*\n\nPor favor, envía una foto de la transferencia siguiendo el ejemplo proporcionado.`,
+              body: `Bien. Aquí tienes los datos para realizar la transferencia al Profesional:\n\n💳 CBU: ${dataTransfer.cbu}\n🏷️ ALIAS: ${dataTransfer.alias}\n👤 NOMBRE: ${dataTransfer.name}\n\n💰 VALOR DE LA CONSULTA: *${turno.price}*\n\nPor favor, envía una foto de la transferencia siguiendo el ejemplo proporcionado.`,
               media:
                 "https://firebasestorage.googleapis.com/v0/b/calendar-dashboard-df06c.appspot.com/o/default%2FHeading.png?alt=media&token=4714f1cb-274a-4cc9-b6ad-5af9caa2f364",
             },
@@ -363,13 +366,13 @@ export default addKeyword<Provider, Database>(
       return gotoFlow(menuFlow);
     }
     if (state.getMyState().medic.turnsZeroThisWeek) {
-      if (ctx.body.toLocaleLowerCase() === "proxima") {
+      if (ctx.body.toLocaleLowerCase() === "proxima" || ctx.body.toLowerCase() === "Proxima" || ctx.body.toLowerCase() === "Próxima") {
         return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
       } else {
         return gotoFlow(giveDaysWhenMedicWorkSingle);
       }
     } else {
-      if (ctx.body.toLocaleLowerCase() === "proxima") {
+      if (ctx.body.toLocaleLowerCase() === "proxima" || ctx.body.toLowerCase() === "Proxima" || ctx.body.toLowerCase() === "Próxima") {
         return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
       }
       if (ctx.body.toLocaleLowerCase() === "actual") {

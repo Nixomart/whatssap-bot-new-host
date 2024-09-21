@@ -41,24 +41,24 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDAYS_WHENMEDIC
         medicData = await state.getMyState().medic;
         const daysData = medicData.businessHoursFiltered.map((day, index) => ({
           body: `*${index}*. Día: *${dayjs()
-            .set("d", day.index)
+            .set("d", day.daysOfWeek[0])
             .add(medicData.week, "week")
-            .format("dddd D, MMMM")}*  Desde: ${day.horarioInicio} Hasta: ${
-            day.horarioFin
-          }`,
+            .format("dddd D, MMMM")}*  Desde: *${day.startTime}* Hasta: *${
+            day.endTime
+          }*`,
         }));
         const messageBody = `¡Genial! 📅 Elige el día para tu consulta:\n\n${daysData
           .map((item) => item.body)
           .join(
             "\n"
-          )}\n\nPor favor, escribe el número correspondiente al día que prefieras.\n\nSi deseas un día para la próxima semana, escribe *proxima* 📅.\nSi prefieres elegir otro tipo de consulta, escribe *consulta* 💼.\n\nEscribe *menu* 🏠 para volver al menú.`;
+          )}\n\n*Por favor, escribe el número correspondiente al día que prefieras.*\n\nSi deseas un día para la próxima semana, escribe *proxima* 📅.\nSi prefieres elegir otro tipo de consulta, escribe *consulta* 💼.\n\nEscribe *menu* 🏠 para volver al menú.`;
 
         if (daysData.length === 0) {
           await state.update({
             medic: { ...medicData, turnsZeroThisWeek: true },
           });
             await flowDynamic(
-              "¡Hola! 👋 Parece que el especialista no estará disponible esta semana. 😔\n\n*¿Qué te parece planificar para la próxima semana?* Escribe *proxima* para ver los días disponibles.\n\nEscribe *menu* 🏠 para volver al menú."
+              "¡Hola! 👋 Parece que el Profesional no estará disponible esta semana. 😔\n\n*¿Qué te parece planificar para la próxima semana?* Escribe *proxima* para ver los días disponibles.\n\nEscribe *menu* 🏠 para volver al menú."
             )
             return gotoFlow(daysAvailablesSingle)
         } else {
@@ -80,24 +80,24 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDAYS_WHENMEDIC
         medicData = await state.getMyState().medic;
         const daysData = medicData.businessHoursFiltered.map((day, index) => ({
           body: `*${index}*. Día: *${dayjs()
-            .set("d", day.index)
+            .set("d", day.daysOfWeek[0])
             .add(medicData.week, "week")
-            .format("dddd D, MMMM")}* Desde: ${day.horarioInicio} Hasta: ${
-            day.horarioFin
-          }`,
+            .format("dddd D, MMMM")}* Desde: *${day.startTime}* Hasta: *${
+            day.endTime
+          }*`,
         }));
         const messageBody = `¡Genial! 📅 Elige el día para tu consulta:\n\n${daysData
           .map((item) => item.body)
           .join(
             "\n"
-          )}\n\nPor favor, escribe el número correspondiente al día que prefieras.\n\nSi deseas un día para la próxima semana, escribe *proxima* 📅.\nSi prefieres elegir otro tipo de consulta, escribe *consulta* 💼.\n\nEscribe *menu* 🏠 para volver al menú.`;
+          )}\n\n*Por favor, escribe el número correspondiente al día que prefieras.*\n\nSi deseas un día para la próxima semana, escribe *proxima* 📅.\nSi prefieres elegir otro tipo de consulta, escribe *consulta* 💼.\n\nEscribe *menu* 🏠 para volver al menú.`;
 
         if (daysData.length === 0) {
           await state.update({
             medic: { ...medicData, turnsZeroThisWeek: true },
           });
             await flowDynamic(
-              "¡Hola! 👋 Parece que el especialista no estará disponible esta semana. 😔\n\n*¿Qué te parece planificar para la próxima semana?* Escribe *proxima* para ver los días disponibles.\n\nEscribe *menu* 🏠 para volver al menú."
+              "¡Hola! 👋 Parece que el Profesional no estará disponible esta semana. 😔\n\n*¿Qué te parece planificar para la próxima semana?* Escribe *proxima* para ver los días disponibles.\n\nEscribe *menu* 🏠 para volver al menú."
             )
             return gotoFlow(daysAvailablesSingle)
         } else {

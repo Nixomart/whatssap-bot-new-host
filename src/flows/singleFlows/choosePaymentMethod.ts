@@ -38,9 +38,9 @@ export default addKeyword<Provider, Database>(utils.setEvent("CHOOSE_PAYMENTMETH
         });
         await flowDynamic(
           `💡 Seguro que quieren elegir el método: ${
-            paymentMethods[ctx.body].type === "os" ? "Obra Social" :
-            paymentMethods[ctx.body].type === "transfer" ? "Transferencia" :
-            paymentMethods[ctx.body].type === "presential" ? "Presencial" : ""
+            paymentMethods[ctx.body].type === "os" ? "*Obra Social*" :
+            paymentMethods[ctx.body].type === "transfer" ? "*Transferencia*" :
+            paymentMethods[ctx.body].type === "presential" ? "*Presencial*" : ""
           } ?\n\n` +
           `Escribe *estoy seguro* para avanzar.\n` +
           `Escribe *pagar* para elegir un nuevo método.`

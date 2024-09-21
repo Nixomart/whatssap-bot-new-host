@@ -5,7 +5,7 @@ import { MemoryDB as Database, addKeyword, utils } from "@builderbot/bot";
 export default addKeyword<Provider, Database>(utils.setEvent("EDIT_TURN_CHOOSEN_FROM_FIREBASE")).addAction(
   { capture: true },
   async (ctx, { gotoFlow, flowDynamic, state }) => {
-    if (ctx.body.toLowerCase() == "estoy de acuerdo") {
+    if (ctx.body.toLowerCase() === "estoy de acuerdo") {
       /* const turn = state.getMyState().medic.turnChoosenToEDIT; */
       await state.update({action: 1})
       return gotoFlow(giveQueryTypesSinglesEdit)

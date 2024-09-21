@@ -12,7 +12,7 @@ export const sendToCustomerParticular = async (bot,req, res) => {
           turnToSendCustomer.newTurn.specialist
         }* \n 📅Los dias: *${turnToSendCustomer.date}* \n 📍Lugar: *${
           turnToSendCustomer.address
-        }*\n *Mensaje del Especialista: *${
+        }*\n *Mensaje del Profesional: *${
           turnToSendCustomer.message
         }*\n\n*METODO DE PAGO*\n ${turnToSendCustomer.newTurn.paymentMethod
           .map(
@@ -37,7 +37,7 @@ export const sendToCustomerParticular = async (bot,req, res) => {
           turnToSendCustomer.newTurn.specialist
         }* \n 📅El dia: *${turnToSendCustomer.date}* \n 📍Lugar: *${
           turnToSendCustomer.address
-        }*\n *Mensaje del Especialista:* *${
+        }*\n *Mensaje del Profesional:* *${
           turnToSendCustomer.message
     }*\n\n*METODO DE PAGO*\n ${turnToSendCustomer.newTurn.paymentMethod
           .map(

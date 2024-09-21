@@ -38,7 +38,11 @@ const main = async () => {
   cron.schedule("00 17 * * *  ", async () => {
     await sendMessageCron();
   });
-
+provider.server.get("/",
+  handleCtx(async (bot, req, res) => {
+    res.end(JSON.stringify({ message: "Hello World" }));
+  })
+)
   provider.server.post(
     "/send-message-provider",
     handleCtx(async (bot, req, res) => {

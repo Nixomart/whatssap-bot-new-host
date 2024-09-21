@@ -28,7 +28,6 @@ import saveTurnPresentialCome from "./pay/payPresential/saveTurnPresential.come"
 import confirmTransferSaveCome from "./pay/payTransfer/confirmTransferSave.come";
 import choosePaymentMethod from "./singleFlows/choosePaymentMethod";
 import daysAvailablesSingle from "./singleFlows/daysAvailablesSingle";
-import getInformationToSave from "./singleFlows/getInformationToSave";
 import giveDaysWhenMedicWorkNextWeekSingle from "./singleFlows/giveDaysWhenMedicWorkNextWeekSingle";
 import giveDaysWhenMedicWorkSingle from "./singleFlows/giveDaysWhenMedicWorkSingle";
 import giveQueryTypesSingle from "./singleFlows/giveQueryTypesSingle";
@@ -39,7 +38,6 @@ import saveTurnToFirebase from "./singleFlows/saveTurnToFirebase";
 import seeKindOfPayments from "./singleFlows/seeKindOfPayments";
 import chooseOsToPaySave from "./singleFlows/payOS/chooseOsToPaySave";
 import confirmTurnSaveOs from "./singleFlows/payOS/confirmTurnSaveOs";
-import getInformationOsSave from "./singleFlows/payOS/getInformationOsSave";
 import getOsNameToSave from "./singleFlows/payOS/getOsNameToSave";
 import listOsSpecialistWorkSave from "./singleFlows/payOS/listOsSpecialistWorkSave";
 import messageConfirmSave from "./singleFlows/payOS/messageConfirmSave";
@@ -47,6 +45,13 @@ import messageConfirmPresentialSave from "./singleFlows/payPresential/messageCon
 import saveTurnPresentialSave from "./singleFlows/payPresential/saveTurnPresentialSave";
 import giveDataToPaywithTransfer from "./singleFlows/payTransfer/giveDataToPaywithTransfer";
 import messageConfirmTransferSave from "./singleFlows/payTransfer/messageConfirmTransferSave";
+import dayOfBirth from "./singleFlows/dateOfBirth/dayOfBirth";
+import monthOfBirth from "./singleFlows/dateOfBirth/monthOfBirth";
+import yearOfBirth from "./singleFlows/dateOfBirth/yearOfBirth";
+import getName from "./singleFlows/getInformation/getName";
+import getLastname from "./singleFlows/getInformation/getLastname";
+import getDni from "./singleFlows/getInformation/getDni";
+import getInformationOsSave from "./singleFlows/payOS/getInformationOsSave";
 
 export default createFlow([
     helloFlow,
@@ -78,7 +83,7 @@ export default createFlow([
     confirmTransferSaveCome,
     choosePaymentMethod,
     daysAvailablesSingle,
-    getInformationToSave,
+    
     giveDaysWhenMedicWorkNextWeekSingle,
     giveDaysWhenMedicWorkSingle,
     giveQueryTypesSingle,
@@ -97,5 +102,11 @@ export default createFlow([
     saveTurnPresentialSave,
     giveDataToPaywithTransfer,
     messageConfirmTransferSave,
-    
+    /* GET DATE OF BIRTH */
+    dayOfBirth,
+    monthOfBirth,
+    yearOfBirth,
+    getName,
+    getLastname,
+    getDni
 ])

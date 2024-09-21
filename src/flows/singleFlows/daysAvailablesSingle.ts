@@ -9,7 +9,9 @@ import menuFlow from "../menu.flow.js";
 dayjs.extend(isSameOrAfter);
 import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
 import { MemoryDB as Database, addKeyword, utils } from "@builderbot/bot";
-export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSINGLE")).addAction(
+export default addKeyword<Provider, Database>(
+  utils.setEvent("DAYS_AVAILABLESSINGLE")
+).addAction(
   { capture: true },
   async (ctx, { state, flowDynamic, gotoFlow }) => {
     let medicData = state.getMyState().medic;
@@ -17,7 +19,8 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
       medic: { ...medicData, chosenDay: parseInt(ctx.body) },
     });
     medicData = state.getMyState().medic;
-    if (ctx.body.toLowerCase() == "consulta") return gotoFlow(giveQueryTypesSingle);
+    if (ctx.body.toLowerCase() == "consulta")
+      return gotoFlow(giveQueryTypesSingle);
     if (
       ctx.body.toLowerCase() == "si quiero" ||
       ctx.body.toLowerCase() == "quiero" ||
@@ -31,7 +34,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
     }
 
     if (medicData.turnsZeroThisWeek) {
-      if (ctx.body.toLowerCase() == "proxima") {
+      if (ctx.body.toLowerCase() == "proxima" || ctx.body.toLowerCase() === "Proxima" || ctx.body.toLowerCase() === "Próxima") {
         await state.update({
           medic: {
             ...medicData,
@@ -44,7 +47,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
         return gotoFlow(giveDaysWhenMedicWorkSingle);
       }
     } else {
-      if (ctx.body.toLowerCase() == "proxima") {
+      if (ctx.body.toLowerCase() == "proxima" || ctx.body.toLowerCase() === "Proxima" || ctx.body.toLowerCase() === "Próxima") {
         await state.update({
           medic: {
             ...medicData,
@@ -62,9 +65,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
       const optionChoosen = medicData.chosenDay;
       if (medicData.businessHoursFiltered[optionChoosen] != undefined) {
         const minutesChoosen = medicData.minutes;
+
         const daySelectedOfMedicWork =
           medicData.businessHoursFiltered[optionChoosen];
-        const selectedDayOfWeek = daySelectedOfMedicWork.index; // Día de la semana seleccionado por el cliente
+        console.log("DAY SELECT OF MEDIC WORK: ", daySelectedOfMedicWork);
+        const selectedDayOfWeek = daySelectedOfMedicWork.daysOfWeek[0]; // Día de la semana seleccionado por el cliente
         const diaEligidoDayjs = dayjs()
           .set("d", selectedDayOfWeek)
           .add(medicData.week, "week");
@@ -103,27 +108,27 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
 
         if (turnsOfDaysSelectedAndAfterTodayBeforeSunday.length == 0) {
           const splitStartHourStartTime =
-            daySelectedOfMedicWork.horarioInicio.split(":")[0];
+            daySelectedOfMedicWork.startTime.split(":")[0];
           const splitStartMinutesStartTime =
-            daySelectedOfMedicWork.horarioInicio.split(":")[1];
+            daySelectedOfMedicWork.startTime.split(":")[1];
           const splitStartHourEndTime =
-            daySelectedOfMedicWork.horarioFin.split(":")[0];
+            daySelectedOfMedicWork.endTime.split(":")[0];
           const splitStartMinutesEndTime =
-            daySelectedOfMedicWork.horarioFin.split(":")[1];
+            daySelectedOfMedicWork.endTime.split(":")[1];
           /* START TIME Y END TIME */
           let dayTodayStartTime = dayjs()
-            .set("d", daySelectedOfMedicWork.index)
+            .set("d", daySelectedOfMedicWork.daysOfWeek[0])
             .set("hour", +splitStartHourStartTime)
             .set("minute", +splitStartMinutesStartTime)
             .set("second", 0);
           const dayTodayEndTime = dayjs()
-            .set("d", daySelectedOfMedicWork.index)
+            .set("d", daySelectedOfMedicWork.daysOfWeek[0])
             .set("hour", +splitStartHourEndTime)
             .set("minute", +splitStartMinutesEndTime)
             .set("second", 0);
 
-            const giveHours = [daySelectedOfMedicWork.horarioInicio];
-            const giveHoursFormatted = [
+          const giveHours = [daySelectedOfMedicWork.startTime];
+          const giveHoursFormatted = [
             dayTodayStartTime.format("YYYY-MM-DDTHH:mm:ss"),
           ];
           if (minutesChoosen > 60) {
@@ -162,9 +167,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
             }))
             .concat([
               {
-                body: "*Escribe el numero correspondiente* 🔢\nEscribe *dias* si deseas elegir otro día.",
+                body: "\n*Elige el horario disponible con el numero correspondiente* 🔢\nEscribe *dias* si deseas elegir otro día.",
               },
             ])
+            /*  */
             .map((item) => item.body)
             .join("\n");
 
@@ -177,7 +183,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
               firstTime: true,
             },
           });
-          await flowDynamic(hourstovide)
+          await flowDynamic(
+            `Eligiste el dia: *${dayjs().set("d", daySelectedOfMedicWork.daysOfWeek[0]).add(medicData.week, "week").format("dddd D, MMMM")}* Desde: *${
+              daySelectedOfMedicWork.startTime
+            }* Hasta: *${daySelectedOfMedicWork.endTime}*\n\n` + hourstovide
+          );
           return gotoFlow(saveTurnSingle);
         } else {
           /* const startTimeWork = {
@@ -185,11 +195,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
               .day(selectedDayOfWeek)
               .set(
                 "hour",
-                parseInt(daySelectedOfMedicWork.horarioInicio.split(":")[0])
+                parseInt(daySelectedOfMedicWork.startTime.split(":")[0])
               )
               .set(
                 "minute",
-                parseInt(daySelectedOfMedicWork.horarioInicio.split(":")[1])
+                parseInt(daySelectedOfMedicWork.startTime.split(":")[1])
               )
               .add(medicData.week, "week")
               .set("second", 0)
@@ -197,11 +207,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
             end: dayjs(turnsOfDaysSelectedAndAfterTodayBeforeSunday[0].start)
               .set(
                 "hour",
-                parseInt(daySelectedOfMedicWork.horarioFin.split(":")[0])
+                parseInt(daySelectedOfMedicWork.endTime.split(":")[0])
               )
               .set(
                 "minute",
-                parseInt(daySelectedOfMedicWork.horarioFin.split(":")[1])
+                parseInt(daySelectedOfMedicWork.endTime.split(":")[1])
               )
               .add(medicData.week -1 , "week")
               .set("second", 0)
@@ -213,11 +223,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
               .day(selectedDayOfWeek)
               .set(
                 "hour",
-                parseInt(daySelectedOfMedicWork.horarioFin.split(":")[0])
+                parseInt(daySelectedOfMedicWork.endTime.split(":")[0])
               )
               .set(
                 "minute",
-                parseInt(daySelectedOfMedicWork.horarioFin.split(":")[1])
+                parseInt(daySelectedOfMedicWork.endTime.split(":")[1])
               )
               .add(medicData.week, "week")
               .set("second", 0)
@@ -226,11 +236,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
               .day(selectedDayOfWeek)
               .set(
                 "hour",
-                parseInt(daySelectedOfMedicWork.horarioFin.split(":")[0])
+                parseInt(daySelectedOfMedicWork.endTime.split(":")[0])
               )
               .set(
                 "minute",
-                parseInt(daySelectedOfMedicWork.horarioFin.split(":")[1])
+                parseInt(daySelectedOfMedicWork.endTime.split(":")[1])
               )
               .add(medicData.week -1, "week")
               .set("second", 0)
@@ -246,7 +256,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
             "TURNOS SELECCIONADO END: ",
             turnsOfDaysSelectedAndAfterTodayBeforeSunday.map((turn) =>
               dayjs(turn.end).format("D dddd HH:mm")
-            ),
+            )
           );
           let availableTurnsString = [];
           function generateTimeSlots() {
@@ -255,11 +265,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
               .day(selectedDayOfWeek)
               .set(
                 "hour",
-                parseInt(daySelectedOfMedicWork.horarioInicio.split(":")[0])
+                parseInt(daySelectedOfMedicWork.startTime.split(":")[0])
               )
               .set(
                 "minute",
-                parseInt(daySelectedOfMedicWork.horarioInicio.split(":")[1])
+                parseInt(daySelectedOfMedicWork.startTime.split(":")[1])
               )
               .add(medicData.week, "week")
               .set("second", 0);
@@ -268,11 +278,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
               .day(selectedDayOfWeek)
               .set(
                 "hour",
-                parseInt(daySelectedOfMedicWork.horarioFin.split(":")[0])
+                parseInt(daySelectedOfMedicWork.endTime.split(":")[0])
               )
               .set(
                 "minute",
-                parseInt(daySelectedOfMedicWork.horarioFin.split(":")[1])
+                parseInt(daySelectedOfMedicWork.endTime.split(":")[1])
               )
               .add(medicData.week, "week")
               .set("second", 0)
@@ -293,19 +303,34 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
           const availableSlots = totalSlots.filter((slot) => {
             const slotStart = slot;
             const slotEnd = slotStart.clone().add(minutesChoosen, "minutes");
-            console.log("SLOT INICIO ", slotStart.format("YYYY-MM-DDTHH:mm:ss"), "SLOT FINAL ", slotEnd.format("YYYY-MM-DDTHH:mm:ss"));
+            console.log(
+              "SLOT INICIO ",
+              slotStart.format("YYYY-MM-DDTHH:mm:ss"),
+              "SLOT FINAL ",
+              slotEnd.format("YYYY-MM-DDTHH:mm:ss")
+            );
             // Verificar si el slot se solapa con algún turno existente
-            const isSlotAvailable = !turnsOfDaysSelectedAndAfterTodayBeforeSunday.some((turn) => {
-              const turnStart = dayjs(turn.start);
-              const turnEnd = dayjs(turn.end);
-              const overlaps = slotStart.isBefore(turnEnd, "minute") && slotEnd.isAfter(turnStart, "minute");
-              console.log("TURNO SOME START: ", turnStart.format("YYYY-MM-DDTHH:mm:ss"), " TURNO SOME END: ", turnEnd.format("YYYY-MM-DDTHH:mm:ss"), " FALSO?? ",  overlaps);
-              return overlaps;
-            });
+            const isSlotAvailable =
+              !turnsOfDaysSelectedAndAfterTodayBeforeSunday.some((turn) => {
+                const turnStart = dayjs(turn.start);
+                const turnEnd = dayjs(turn.end);
+                const overlaps =
+                  slotStart.isBefore(turnEnd, "minute") &&
+                  slotEnd.isAfter(turnStart, "minute");
+                console.log(
+                  "TURNO SOME START: ",
+                  turnStart.format("YYYY-MM-DDTHH:mm:ss"),
+                  " TURNO SOME END: ",
+                  turnEnd.format("YYYY-MM-DDTHH:mm:ss"),
+                  " FALSO?? ",
+                  overlaps
+                );
+                return overlaps;
+              });
             return isSlotAvailable;
           });
           availableTurnsString = availableSlots.map((slot, index) => ({
-            body: `*${index }*. ¡Turno Disponible! 🕰️ *${dayjs(slot).format(
+            body: `*${index}*. ¡Turno Disponible! 🕰️ *${dayjs(slot).format(
               "dddd D, HH:mm a"
             )}*`,
           }));
@@ -313,14 +338,14 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
             .concat([
               {
                 body: `¡Genial! 🌈 Estos son los turnos disponibles para el *${dayjs()
-                  .set("day", daySelectedOfMedicWork.index)
+                  .set("day", daySelectedOfMedicWork.daysOfWeek[0])
                   .set(
                     "hour",
-                    parseInt(daySelectedOfMedicWork.horarioFin.split(":")[0])
+                    parseInt(daySelectedOfMedicWork.endTime.split(":")[0])
                   )
                   .set(
                     "minute",
-                    parseInt(daySelectedOfMedicWork.horarioFin.split(":")[1])
+                    parseInt(daySelectedOfMedicWork.endTime.split(":")[1])
                   )
                   .add(medicData.week, "week")
                   .format(
@@ -355,15 +380,15 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
             await state.update({
               medic: {
                 ...medicData,
-                horariosIndex: availableSlots.map(
-                  (turn, index) => index
-                ),
+                horariosIndex: availableSlots.map((turn, index) => index),
                 horariosAvailable: turnsAvailables,
-                horariosformatted: availableSlots.map((slot)=>dayjs(slot).format("YYYY-MM-DDTHH:mm:ss")),
+                horariosformatted: availableSlots.map((slot) =>
+                  dayjs(slot).format("YYYY-MM-DDTHH:mm:ss")
+                ),
                 firstTime: false,
               },
             });
-            await flowDynamic(turnsAvailables)
+            await flowDynamic(turnsAvailables);
             return gotoFlow(saveTurnSingle);
           }
         }
@@ -375,19 +400,19 @@ export default addKeyword<Provider, Database>(utils.setEvent("DAYS_AVAILABLESSIN
               comeFromErrorNext: false,
             },
           });
-            await flowDynamic([
-              {
-                body: "*POR FAVOR* 🙏 Elige un día correcto usando los números 🔢...",
-              },
-            ])
-            return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle)
+          await flowDynamic([
+            {
+              body: "*POR FAVOR* 🙏 Elige un día correcto usando los números 🔢...",
+            },
+          ]);
+          return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
         } else {
-            await flowDynamic([
-              {
-                body: "*POR FAVOR* 🙏 Elige un día correcto usando los números 🔢...\nEscribe *consulta* si quieres elegir otro tipo de consulta.",
-              },
-            ])
-            return gotoFlow(giveDaysWhenMedicWorkSingle)
+          await flowDynamic([
+            {
+              body: "*POR FAVOR* 🙏 Elige un día correcto usando los números 🔢...\nEscribe *consulta* si quieres elegir otro tipo de consulta.",
+            },
+          ]);
+          return gotoFlow(giveDaysWhenMedicWorkSingle);
         }
       }
     }

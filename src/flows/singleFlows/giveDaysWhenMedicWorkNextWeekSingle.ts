@@ -57,24 +57,24 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDAYS_WHENMEDIC
             (buss) => buss.idReservacion === typeTurnChoosen.id 
           )
           .map((day, index) => ({
-            body: `*${index}*. Día: *${dayjs().set("d", day.index).add(medicData.week, "week").format("dddd D, MMMM")}* Desde: ${
-              day.horarioInicio
-            } Hasta: ${day.horarioFin}`,
+            body: `*${index}*. Día: *${dayjs().set("d", day.daysOfWeek[0]).add(medicData.week, "week").format("dddd D, MMMM")}* Desde: *${
+              day.startTime
+            } Hasta: ${day.endTime}*`,
           }));
       } else {
         daysNextWeekData = state
           .getMyState()
           .medic.businessHoursFiltered.filter((buss)=> typeof buss === "object" ).map((day, index) => ({
-            body: `*${index}*. Día:  *${dayjs().set("d", day.index).add(medicData.week, "week").format("dddd D, MMMM")}* Desde: ${
-              day.horarioInicio
-            } Hasta: ${day.horarioFin}`,
+            body: `*${index}*. Día:  *${dayjs().set("d", day.daysOfWeek[0]).add(medicData.week, "week").format("dddd D, MMMM")}* Desde: *${
+              day.startTime
+            }* Hasta: *${day.endTime}*`,
           }));
       }
       const messageBody = ` ¡Genial! 📅 Estos son los días que trabajará la próxima semana:\n\n${daysNextWeekData
         .map((item) => item.body)
         .join(
           "\n"
-        )}\n\nElige un día escribiendo el número correspondiente.\n\nSi quieres eligir un dia de la proxima semana Escribe *proxima* \nSi prefieres elegir un día de la semana actual, escribe *actual* ⏰.\n\nEscribe *menu* 🏠 para volver al menú.`;
+        )}\n\n*Elige un día escribiendo el número correspondiente.*\n\nSi quieres eligir un dia de la proxima semana Escribe *proxima* \nSi prefieres elegir un día de la semana actual, Escribe *actual* ⏰.\nEscribe *menu* 🏠 para volver al menú.`;
       await state.update({
         medic: { ...state.getMyState().medic, turnsZeroThisWeek: false },
       });

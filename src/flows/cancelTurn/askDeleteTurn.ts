@@ -12,7 +12,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("ASK_DELETE_TURN"))
      await flowDynamic(
         `Turnos encontrados para *ELIMINAR* ${dayjs(turn[0].start).format(
           "dddd D, MMMM HH:mm"
-        )} \n\nAquí están los detalles de tus turnos:\nEspecialista: *${
+        )} \n\nAquí están los detalles de tus turnos:\nProfesional: *${
           medicData.name
         }*\n${turn
           .map(

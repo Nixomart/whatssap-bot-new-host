@@ -1,10 +1,7 @@
 /* eslint-disable no-self-assign */
 /* eslint-disable no-prototype-builtins */
 import dayjs from "dayjs";
-import {
-  doc,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 /*  */
 
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
@@ -45,8 +42,8 @@ export default addKeyword<Provider, Database>(utils.setEvent("PAY_FLOW_COME"))
     let turnoCercanoFixed = null;
     if (turnsFixeds.length > 0) {
       /* REESTABLECER PAGOS */
-      let reestablecido ;
-      reestablecido =false
+      let reestablecido;
+      reestablecido = false;
       const turnsFixeds2 = turnsFixeds.map((turn) => {
         const diaDelTurno = dayjs()
           .day(turn.daysOfWeek[0])
@@ -244,7 +241,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("PAY_FLOW_COME"))
                   case "TRANSFER_CUSTOMER_YES":
                     return `Tienes un turno recurrente para ${
                       turno.week == 0 ? "este" : "el proximo"
-                    } *${fechaFormateada}* Haz pagado este turno. *Espera a que el especialista confirme la transferencia.*`;
+                    } *${fechaFormateada}* Haz pagado este turno. *Espera a que el Profesional confirme la transferencia.*`;
                   case "TURNO_CONFIRMED":
                     return `Tienes un turno recurrente para ${
                       turno.week == 0 ? "este" : "el proximo"
@@ -324,9 +321,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("PAY_FLOW_COME"))
             .join("\n\n");
 
           return endFlow(
-            `📅 Tienes turnos registrados!. Aquí están los detalles:\n\n${mensajeDeTurnos} \n\nSi tienes mas turnos, y no aparecen. Escribe mañana de nuevo *${
-              "mispagos " + medicData.consultName
-            }*
+            `📅 Tienes turnos registrados!. Aquí están los detalles:\n\n${mensajeDeTurnos}
             \nSi deseas ver el menu principal, escribe *miturno ${medicData.consultName}*
             `
           );
@@ -356,42 +351,39 @@ export default addKeyword<Provider, Database>(utils.setEvent("PAY_FLOW_COME"))
         switch (turnoNew.status) {
           case "TRANSFER_CUSTOMER_NO":
             await state.update({ statuscome: "TRANSFER_MEDIC_NO" });
-            return await flowDynamic([
+            await flowDynamic(
+              `Ya tienes un turno registrado para el dia \n\n *${dayjs(
+                turnoNew.start
+              ).format(
+                "dddd D, MMMM HH:mm a"
+              )}* Pero no enviaste la foto de confirmacion de transferencia. Enviala ahora mismo como lo indicado en la foto!`
+            );
+            await flowDynamic([
               {
-                body: `Ya tienes un turno registrado para el dia \n\n *${dayjs(
-                  turnoNew.start
-                ).format(
-                  "dddd D, MMMM HH:mm a"
-                )}* Pero no enviaste la foto de confirmacion de transferencia. Enviala ahora mismo como lo indicado en la foto!`,
-              },
-              {
-                body: `Bien. Aquí tienes los datos para realizar la transferencia al especialista:\n\n💳 CBU: ${dataTransfer.cbu}\n🏷️ ALIAS: ${dataTransfer.alias}\n👤 NOMBRE: ${dataTransfer.name}\n\n💰 VALOR DE LA CONSULTA: *${turnoNew.price}*\n\nPor favor, envía una foto de la transferencia siguiendo el ejemplo proporcionado. *Si tienes mas turnos, confirma este para confirmar los demas*`,
+                body: `*Aquí tienes los datos para realizar la transferencia al Profesional:*\n\n💳 CBU: ${dataTransfer.cbu}\n🏷️ ALIAS: ${dataTransfer.alias}\n👤 NOMBRE: ${dataTransfer.name}\n\n💰 VALOR DE LA CONSULTA: *$ ${turnoNew.price}*\n\nPor favor, envía una foto de la transferencia siguiendo el ejemplo proporcionado. *Si tienes mas turnos, confirma este para confirmar los demas*`,
                 media:
                   "https://firebasestorage.googleapis.com/v0/b/calendar-dashboard-df06c.appspot.com/o/default%2FHeading.png?alt=media&token=4714f1cb-274a-4cc9-b6ad-5af9caa2f364",
               },
-              {
-                body: "*SOLO TIENES UN INTENTO PARA ENVIAR LA IMAGEN*",
-              },
             ]);
+
+            return endFlow("*SOLO TIENES UN INTENTO PARA ENVIAR LA IMAGEN*");
           case "TRANSFER_MEDIC_NO":
             await state.update({ statuscome: "TRANSFER_MEDIC_NO" });
-            return await flowDynamic([
+            await flowDynamic(
+              `Ya tienes un turno registrado para el dia \n\n *${dayjs(
+                turnoNew.start
+              ).format(
+                "dddd D, MMMM HH:mm a"
+              )}* Pero no enviaste la foto de confirmacion de transferencia. Enviala ahora mismo como lo indicado en la foto!`
+            );
+            await flowDynamic([
               {
-                body: `Ya tienes un turno registrado para el dia \n\n *${dayjs(
-                  turnoNew.start
-                ).format(
-                  "dddd D, MMMM HH:mm a"
-                )}* Pero no enviaste la foto de confirmacion de transferencia. Enviala ahora mismo como lo indicado en la foto!`,
-              },
-              {
-                body: `Bien. Aquí tienes los datos para realizar la transferencia al especialista:\n\n💳 CBU: ${dataTransfer.cbu}\n🏷️ ALIAS: ${dataTransfer.alias}\n👤 NOMBRE: ${dataTransfer.name}\n\n💰 VALOR DE LA CONSULTA: *${turnoNew.price}*\n\nPor favor, envía una foto de la transferencia siguiendo el ejemplo proporcionado. *Si tienes mas turnos, confirma este para confirmar los demas*`,
+                body: `*Aquí tienes los datos para realizar la transferencia al Profesional:*\n\n💳 CBU: ${dataTransfer.cbu}\n🏷️ ALIAS: ${dataTransfer.alias}\n👤 NOMBRE: ${dataTransfer.name}\n\n💰 VALOR DE LA CONSULTA: *$ ${turnoNew.price}*\n\nPor favor, envía una foto de la transferencia siguiendo el ejemplo proporcionado. *Si tienes mas turnos, confirma este para confirmar los demas*`,
                 media:
                   "https://firebasestorage.googleapis.com/v0/b/calendar-dashboard-df06c.appspot.com/o/default%2FHeading.png?alt=media&token=4714f1cb-274a-4cc9-b6ad-5af9caa2f364",
               },
-              {
-                body: "*SOLO TIENES UN INTENTO PARA ENVIAR LA IMAGEN*",
-              },
             ]);
+            return endFlow("*SOLO TIENES UN INTENTO PARA ENVIAR LA IMAGEN*");
           case "TRANSFER_CUSTOMER_YES":
             return endFlow(
               `📅 ¡Ya tienes un turno registrado para el día!\n${dayjs(

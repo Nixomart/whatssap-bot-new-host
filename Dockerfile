@@ -31,7 +31,7 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/bot_sessions ./bot_sessions 
 COPY --from=builder /app/bot_sessions/creds.json ./bot_sessions/creds.json 
 COPY --from=builder /app/ecosystem.config.cjs ./ecosystem.config.cjs
-COPY --from=builder /app/bot.qr.png ./bot.qr.png 
+#COPY --from=builder /app/bot.qr.png ./bot.qr.png 
 COPY --from=builder /app/*.json /app/*-lock.yaml ./
 
 RUN npm install -g pm2
@@ -43,4 +43,4 @@ RUN npm cache clean --force && pnpm install --production --ignore-scripts \
     && addgroup -g 1001 -S nodejs && adduser -S -u 1001 nodejs \
     && rm -rf $PNPM_HOME/.npm $PNPM_HOME/.node-gyp
 
-CMD ["pm2-runtime", "ecosystem.config.cjs"]
+CMD ["npm", "pm2"]

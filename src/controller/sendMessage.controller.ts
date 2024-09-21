@@ -31,7 +31,7 @@ export const sendMessage = async  (bot,req, res) =>{
           const message =  `💢💢 Hola, *${specialist.specialist}.* 👨‍⚕️ 💢💢 \n\n *Tienes los siguientes turnos:*\n${turnsText} \n\n *Para ver tu calendario de turnos, ingresa a este sitio* \n\n ${specialist.link}`
           
            await bot.sendMessage(number, message , {});
-          console.log("number: ", number, "ENVIA A ESPECIALISTA ESPECIALISTA, RAPIDO: /send-message-provider");
+          console.log("number: ", number, "ENVIA A Profesional Profesional, RAPIDO: /send-message-provider");
         }
   
         const response: ApiResponse<null> ={
@@ -42,7 +42,7 @@ export const sendMessage = async  (bot,req, res) =>{
         }
         res.end(JSON.stringify(response));
       } catch (error) {
-        console.log("ERROR AL ENVIAR ESPECIALISTA PAPIDO: ", error);
+        console.log("ERROR AL ENVIAR Profesional PAPIDO: ", error);
         const response: ApiResponse<null> ={
           message: error.message,
           status: "error",

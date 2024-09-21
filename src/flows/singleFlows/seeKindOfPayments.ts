@@ -4,6 +4,7 @@ import { verifyTurns } from "../../fuctions/verifyTurns.js";
 import choosePaymentMethod from "./choosePaymentMethod.js";
 import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
 import { MemoryDB as Database, addKeyword, utils } from "@builderbot/bot";
+import dayOfBirth from "./dateOfBirth/dayOfBirth.js";
 export default addKeyword<Provider, Database>(utils.setEvent("SEEKIND_PAYMENTS")).addAction(
   async (ctx, { state, flowDynamic, gotoFlow }) => {
     const medicData = state.getMyState().medic;
@@ -15,14 +16,17 @@ export default addKeyword<Provider, Database>(utils.setEvent("SEEKIND_PAYMENTS")
         .format("YYYY-MM-DDTHH:mm:ss"),
       medicData2.uid
     );
+    if (ctx.body.toLowerCase() == "fecha") {
+      return gotoFlow(dayOfBirth);
+    }
 
     if (state.getMyState().action === 1) {
         await flowDynamic(
-          `¡Genial elección! 🌟 \nPara confirmar, ¿quieres *EDITAR* tu turno con el especialista *${
+          `¡Genial elección! 🌟 \nPara confirmar, ¿quieres *EDITAR* tu turno con el Profesional *${
             medicData.name
           }* para el *${dayjs(medicData.hourChoosenTofirebase).format(
             "dddd D, MMMM HH:mm a"
-          )}*? \n\nRevisemos juntos los detalles:\nDirección: *qwoenqowe*\nEspecialista: *${
+          )}*? \n\nRevisemos juntos los detalles:\nDirección: *qwoenqowe*\nProfesional: *${
             medicData.name
           }*\nFecha original: *${dayjs(
             medicData.turnChoosenToEDIT.start
@@ -36,9 +40,10 @@ export default addKeyword<Provider, Database>(utils.setEvent("SEEKIND_PAYMENTS")
         )
         return gotoFlow(saveTurnToFirebase)
     } else {
+      
       await state.update({ paymentMethod: medicData.paymentMethods, save: true });
         await flowDynamic(
-          `Elige un método de pago, escribiendo el numero correspondiente 🔢:\n` +
+          `*Elige un método de pago*, escribiendo el numero correspondiente 🔢:\n\n` +
           `${medicData.paymentMethods.map(
             (pay, index) => `*${index}*. ${
               pay.type === "os" ? "Obra Social" :

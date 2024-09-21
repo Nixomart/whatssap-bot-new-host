@@ -1,4 +1,3 @@
-import getInformationToSave from "./getInformationToSave.js";
 import dayjs from "dayjs";
 import isAgreeToSave from "./seeKindOfPayments.js";
 import menuFlow from "../menu.flow.js";
@@ -9,6 +8,7 @@ import { MemoryDB as Database, addKeyword, utils } from "@builderbot/bot";
 import giveDaysWhenMedicWorkNextWeekSingle from "./giveDaysWhenMedicWorkNextWeekSingle.js";
 import giveDaysWhenMedicWorkSingle from "./giveDaysWhenMedicWorkSingle.js";
 import { db } from "~/firebase/firebase.js";
+import getName from "./getInformation/getName.js";
 export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_TOFIREBASE")).addAction(
   { capture: true },
   async (ctx, { flowDynamic, gotoFlow, state, endFlow }) => {
@@ -76,7 +76,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_TOFIREBAS
         ctx.body.toLowerCase() == "dato" ||
         ctx.body.toLowerCase() == "dat"
       ) {
-        return gotoFlow(getInformationToSave);
+        return gotoFlow(getName);
       } else {
         return gotoFlow(isAgreeToSave);
       }

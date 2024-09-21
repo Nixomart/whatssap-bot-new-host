@@ -21,11 +21,11 @@ export default addKeyword<Provider, Database>(utils.setEvent("CHOOSE_PAY")).addA
       await flowDynamic(
         `💡 Seguro que quieren elegir el método: ${
           paymentMethods[ctx.body].type === "os"
-            ? "Obra Social"
+            ? "*Obra Social*"
             : paymentMethods[ctx.body].type === "transfer"
-            ? "Transferencia"
+            ? "*Transferencia*"
             : paymentMethods[ctx.body].type === "presential"
-            ? "Presencial"
+            ? "*Presencial*"
             : ""
         } ?\n\n` +
           `Escribe *estoy seguro* para avanzar.\n` +

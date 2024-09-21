@@ -1,8 +1,8 @@
 module.exports = {
   apps: [
     {
-/*       script: "./dist/app.js", */
-      script: './src/app.ts', 
+      script: "./dist/app.js",
+      /* script: './src/app.ts',  */
       cron_restart: "0 */8 * * *",
       instances: 1,
       autorestart: true,
@@ -11,6 +11,7 @@ module.exports = {
       max_memory_restart: "1G",
       out_file: './logs/out.log',  
       error_file: './logs/error.log',
+      exec_mode: "cluster"
     },
   ],
 

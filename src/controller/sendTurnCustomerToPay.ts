@@ -8,7 +8,7 @@ export const sendTurnCustomerToPay = async (bot,req, res) => {
     let message 
     if (turnToSendCustomer.fixed === true) {
       message =  `🔵🔵*Tienes un turno RECURRENTE*🔵🔵 
-         \n📅*El especialista te ha asignado un turno RECURRENTE:* \n\n 💢💢 Estimado/a, *${
+         \n📅*El Profesional te ha asignado un turno RECURRENTE:* \n\n 💢💢 Estimado/a, *${
           turnToSendCustomer.nameLastname
         }*.  💢💢 \n\n🟢Tienes turno *RECURRENTE* con: *${
           turnToSendCustomer.specialist
@@ -17,7 +17,7 @@ export const sendTurnCustomerToPay = async (bot,req, res) => {
         }*\n\nEscribe *mispagos ${turnToSendCustomer.name}* para eligir un metodo. Deberás pagar siempre antes del proximo turno para que lo confirmes.`
     }else{
       message = `🔵🔵*Tienes un turno proveniente del sistema PedirTurno.Online*🔵🔵 
-         \n📅*El especialista te ha asignado un turno:* \n\n 💢💢 Estimado/a, *${
+         \n📅*El Profesional te ha asignado un turno:* \n\n 💢💢 Estimado/a, *${
           turnToSendCustomer.nameLastname
         }*.  💢💢 \n\n🟢Tienes turno con: *${
           turnToSendCustomer.specialist

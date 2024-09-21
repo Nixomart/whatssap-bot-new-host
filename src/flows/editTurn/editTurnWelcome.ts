@@ -41,7 +41,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("EDIT_TURN_WELCOME"
           turns[0].start
         ).format(
           "dddd D, MMMM HH:mm a"
-        )}\n\n*Confirma el turno, pagandolo para poder modificarlo*\n\nSi quieres volver al menu en cualquier momento escribe. *miturno ${medicData.consultName}*`
+        )}\n\n*Confirma el turno, pagandolo para poder modificarlo*\n\nSi quieres volver al menu en cualquier momento escribe. *miturno*`
       );
     }
     if (turns[0].confirmed === false && !turns[0].hasOwnProperty("me")) {
@@ -50,7 +50,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("EDIT_TURN_WELCOME"
           turns[0].start
         ).format(
           "dddd D, MMMM HH:mm a"
-        )}\n\n*Espera a que el especialista lo confirme para poder editarlo*\n\nSi quieres volver al menu en cualquier momento escribe. *miturno ${medicData.consultName}*`
+        )}\n\n*Espera a que el especialista lo confirme para poder editarlo*\n\nSi quieres volver al menu en cualquier momento escribe. *miturno*`
       );
     }
   

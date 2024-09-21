@@ -33,7 +33,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("CANCEL_TURN_WELCOM
    
     if (!dayjs().isBefore(tiempoParaCancelar)) {
         await flowDynamic(
-          "No se puede cancelar el turno. El especialista ha puesto una tolerancia para cancelar o editar el turno. 🛑🔄"
+          "No se puede cancelar el turno. El Profesional ha puesto una tolerancia para cancelar o editar el turno. 🛑🔄"
         )
         return gotoFlow(menuFlow)
     }
@@ -52,7 +52,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("CANCEL_TURN_WELCOM
           turns[0].start
         ).format(
           "dddd D, MMMM HH:mm a"
-        )}\n\n*Espera a que el especialista lo confirme para poder cancelarlo*`
+        )}\n\n*Espera a que el Profesional lo confirme para poder cancelarlo*`
       );
     } */
 

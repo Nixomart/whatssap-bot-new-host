@@ -7,13 +7,13 @@ export const cancelTurnSend = async (bot,req, res) => {
     const number = `${turnToSendCustomer.phone}`;
     let message
     if (turnToSendCustomer.fixed === true && turnToSendCustomer.newTurn.imageConfirmation !== null) {
-      message = `🔴🔴*El especialista no recibio el pago correctamente de tu turno *RECURRENTE**🔴🔴 \n\n 💢💢 Estimado/a, *${
+      message = `🔴🔴*El Profesional no recibio el pago correctamente de tu turno *RECURRENTE**🔴🔴 \n\n 💢💢 Estimado/a, *${
           turnToSendCustomer.nameLastname
         }*.  💢💢 \n\n Tu turno turno con: *${
           turnToSendCustomer.specialist
         }* \n 📅El dia: *${turnToSendCustomer.date}* \n 📍Lugar: *${
           turnToSendCustomer.address
-        }*\n\nEscribe *mispagos ${turnToSendCustomer.consultName}* para pagarlo nuevamente\n\n*Mensaje del especialista:* *${turnToSendCustomer.message}*`
+        }*\n\nEscribe *mispagos ${turnToSendCustomer.consultName}* para pagarlo nuevamente\n\n*Mensaje del Profesional:* *${turnToSendCustomer.message}*`
     }else{
       message = `🔴🔴*Tu turno fue cancelado*🔴🔴 \n\n 💢💢 Estimado/a, *${
           turnToSendCustomer.nameLastname
@@ -21,7 +21,7 @@ export const cancelTurnSend = async (bot,req, res) => {
           turnToSendCustomer.specialist
         }* \n 📅El dia: *${turnToSendCustomer.date}* \n 📍Lugar: *${
           turnToSendCustomer.address
-        }*\n\n*Mensaje del especialista:* ${turnToSendCustomer.message}`
+        }*\n\n*Mensaje del Profesional:* ${turnToSendCustomer.message}`
       }
     await bot.sendMessage(number, message , {});
     console.log("cancelado ", number);

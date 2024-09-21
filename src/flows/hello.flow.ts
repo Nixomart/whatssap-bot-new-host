@@ -22,7 +22,7 @@ export default addKeyword<Provider, Database>(["miturno", "Miturno"], {
     const medicosplit = ctx.body.split(" ");
     console.log("ctx.body", ctx.body);
 
-    if (medicosplit.length > 1) {
+    if (medicosplit.length > 1 && (medicosplit[0] === "miturno" || medicosplit[0] === "Miturno")  ) {
       const consultsRef = collection(db, "consults");
       const qeqwe = query(
         consultsRef,
@@ -78,17 +78,18 @@ export default addKeyword<Provider, Database>(["miturno", "Miturno"], {
               }
               if (customerFound.ban || customerFound.cancell >= 3) {
                 return endFlow(
-                  "👨‍⚕️ Se ha bloqueado tu número.\n\nEsto se debe a múltiples cancelaciones o postergaciones de citas. Si crees que esto es un error o deseas discutir tu situación, te recomendamos contactar directamente con el especialista."
+                  "👨‍⚕️ Se ha bloqueado tu número.\n\nEsto se debe a múltiples cancelaciones o postergaciones de citas. Si crees que esto es un error o deseas discutir tu situación, te recomendamos contactar directamente con el Profesional."
                 );
               }
 
               await flowDynamic(
-                `*¡Hola!* 🌟\n ${medicData.about} 😊\n\nEspecialista: *${medicData.name}*, \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\nSi quieres cancelar un turno. Escribe *cancelar*. \nPara cambiar la fecha de un turno. Escribe *editar*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
+                `*¡Hola! soy el asistente de ${medicData.name}* 🌟\n${medicData.about} 😊 \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\n\nSi quieres cancelar un turno. Escribe *cancelar*.\n\nPara cambiar la fecha de un turno. Escribe *editar*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
               );
               return gotoFlow(welcomeFlow);
             } else {
+              await state.update({patientFound: {patientFound: false}});
               await flowDynamic(
-                `*¡Hola!* 🌟\n ${medicData.about} 😊\n\nEspecialista: *${medicData.name}*, \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\nSi quieres cancelar un turno. Escribe *cancelar*. \nPara cambiar la fecha de un turno. Escribe *editar*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
+                `*¡Hola! soy el asistente de ${medicData.name}* 🌟\n${medicData.about} 😊 \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\n\nSi quieres cancelar un turno. Escribe *cancelar*.\n\nPara cambiar la fecha de un turno. Escribe *editar*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
               );
               return gotoFlow(welcomeFlow);
             }
@@ -104,7 +105,7 @@ export default addKeyword<Provider, Database>(["miturno", "Miturno"], {
         */
       } else {
         return endFlow(
-          "*¡Ups!* 🤷‍♂️\nNo se encontró médico en esta búsqueda. \nPor favor, asegúrate de ingresar el nombre correcto o intenta con otro especialista. 🩺🔍          "
+          "*¡Ups!* 🤷‍♂️\nNo se encontró médico en esta búsqueda. \nPor favor, asegúrate de ingresar el nombre correcto o intenta con otro Profesional. 🩺🔍          "
         );
       }
     } else {

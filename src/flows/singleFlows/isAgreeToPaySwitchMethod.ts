@@ -21,7 +21,8 @@ export default addKeyword<Provider, Database>(utils.setEvent("CHOOSE_PAY")).addA
             (cus) => cus.phone == ctx.from
           );
           const paymentCC = medicData.paymentMethods.find((pay)=>pay.id == "3")
-
+          console.log("PATIENT FOUND: ", patientFound);
+          
           if (patientFound.patientFound === false || (hasOsCsutomer !== undefined && hasOsCsutomer.os_name === null)) {
             if (paymentCC.allOs == false) {
               return gotoFlow(listOsSpecialistWorkSave);

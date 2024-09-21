@@ -13,7 +13,7 @@ export const editTurnMessage = async (bot,req, res) => {
     📅 *Fecha anterior*: *${turnToSendCustomer.oldDate}*\n
     📅 *Nueva fecha*: *${turnToSendCustomer.date}*\n\n
     📍 *Lugar*: *${turnToSendCustomer.address}*\n\n
-    📝 *Mensaje del especialista*: *${turnToSendCustomer.message}*\n\n
+    📝 *Mensaje del Profesional*: *${turnToSendCustomer.message}*\n\n
     Te pedimos disculpas por cualquier inconveniente que esto pueda causar y agradecemos tu comprensión. Estamos a tu disposición para cualquier consulta que puedas tener.`
     } else {
       message =  `🟢🟢 *¡Atención! Tu turno ha sido reprogramado* 🟢🟢\n\n
@@ -22,7 +22,7 @@ export const editTurnMessage = async (bot,req, res) => {
     📅 *Fecha anterior*: *${turnToSendCustomer.oldDate}*\n
     📅 *Nueva fecha*: *${turnToSendCustomer.date}*\n\n
     📍 *Lugar*: *${turnToSendCustomer.address}*\n\n
-    📝 *Mensaje del especialista*: *${turnToSendCustomer.message}*\n\n
+    📝 *Mensaje del Profesional*: *${turnToSendCustomer.message}*\n\n
     Te pedimos disculpas por cualquier inconveniente que esto pueda causar y agradecemos tu comprensión. Estamos a tu disposición para cualquier consulta que puedas tener.`
     }
     console.log("editado ", id);

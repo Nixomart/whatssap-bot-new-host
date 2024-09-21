@@ -1,9 +1,9 @@
 import seeKindOfPayments from "../seeKindOfPayments.js";
-import getInformationOsSave from "./getInformationOsSave.js";
 import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
 import { MemoryDB as Database, addKeyword, utils } from "@builderbot/bot";
+import getInformationOsSave from "./getInformationOsSave.js";
 export default addKeyword<Provider, Database>(utils.setEvent("GET_OSNAME_SAVE")).addAnswer(
-  "El especialista acepta todas las obras sociales. Escribe el nombre de tu obra social. Por ejemplo. *ISJ, OSDE, ETC*\n\nEscribe *pagar* 🔄 si deseas elegir otro metodo de pago.",
+  "El Profesional acepta todas las obras sociales. Escribe el nombre de tu obra social. Por ejemplo. *ISJ, OSDE, ETC*\n\nEscribe *pagar* 🔄 si deseas elegir otro metodo de pago.",
   { capture: true },
   async (ctx, { state, fallBack, gotoFlow, flowDynamic }) => {
     if (ctx.body.toLowerCase() == "pagar") {

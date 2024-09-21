@@ -4,7 +4,7 @@ import axios from "axios";
 import { db } from "~/firebase/firebase.js";
 
 export const handleDetectBotNotWork  = async () => {
-  const url = "https://whatssapbot.online"
+  const url = "https://www.whatssap-bot.online"
   try {
     const id = await findContainerName();
     const docRef = doc(db, "consults", "qeqwe");
