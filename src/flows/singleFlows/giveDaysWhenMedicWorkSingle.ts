@@ -22,6 +22,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDAYS_WHENMEDIC
     );
     const chosenDuration = medicData.chosenDuration;
     if (reservcionesINdex.includes(chosenDuration) ) {
+      console.log("businessHoursAlone", medicData.businessHoursAlone);
       await state.update({price: medicData.reservaciones[chosenDuration].price, idReservacion: medicData.reservaciones[chosenDuration].id});
       if (medicData.reservaciones[chosenDuration].own) {
         const minutes = medicData.reservaciones[chosenDuration].minutes;
@@ -34,17 +35,18 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDAYS_WHENMEDIC
               (buss) =>
                 buss.idReservacion ===
                   medicData.reservaciones[chosenDuration].id &&
-                buss.index > dayjs().day()
+                buss.daysOfWeek[0] > dayjs().day()
             ),
           },
         });
         medicData = await state.getMyState().medic;
+       
         const daysData = medicData.businessHoursFiltered.map((day, index) => ({
           body: `*${index}*. Día: *${dayjs()
             .set("d", day.daysOfWeek[0])
             .add(medicData.week, "week")
-            .format("dddd D, MMMM")}*  Desde: *${day.startTime}* Hasta: *${
-            day.endTime
+            .format("dddd D, MMMM")}*  Desde: *${dayjs().set("h", day.startTime.split(":")[0]).set("m",day.startTime.split(":")[1]).format("hh:mm a")}* Hasta: *${
+              dayjs().set("h", day.endTime.split(":")[0]).set("m",day.endTime.split(":")[1]).format("hh:mm a")
           }*`,
         }));
         const messageBody = `¡Genial! 📅 Elige el día para tu consulta:\n\n${daysData
@@ -52,7 +54,6 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDAYS_WHENMEDIC
           .join(
             "\n"
           )}\n\n*Por favor, escribe el número correspondiente al día que prefieras.*\n\nSi deseas un día para la próxima semana, escribe *proxima* 📅.\nSi prefieres elegir otro tipo de consulta, escribe *consulta* 💼.\n\nEscribe *menu* 🏠 para volver al menú.`;
-
         if (daysData.length === 0) {
           await state.update({
             medic: { ...medicData, turnsZeroThisWeek: true },
@@ -73,7 +74,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDAYS_WHENMEDIC
             minutes: minutes,
             week: 0,
             businessHoursFiltered: medicData.businessHours.filter(
-              (buss) => buss.index > dayjs().day() && typeof buss === "object" 
+              (buss) => buss.daysOfWeek[0] > dayjs().day() && typeof buss === "object" 
             ),
           },
         });
@@ -82,8 +83,8 @@ export default addKeyword<Provider, Database>(utils.setEvent("GIVEDAYS_WHENMEDIC
           body: `*${index}*. Día: *${dayjs()
             .set("d", day.daysOfWeek[0])
             .add(medicData.week, "week")
-            .format("dddd D, MMMM")}* Desde: *${day.startTime}* Hasta: *${
-            day.endTime
+            .format("dddd D, MMMM")}* Desde: *${dayjs().set("h", day.startTime.split(":")[0]).set("m",day.startTime.split(":")[1]).format("hh:mm a")}* Hasta: *${
+              dayjs().set("h", day.endTime.split(":")[0]).set("m",day.endTime.split(":")[1]).format("hh:mm a")
           }*`,
         }));
         const messageBody = `¡Genial! 📅 Elige el día para tu consulta:\n\n${daysData

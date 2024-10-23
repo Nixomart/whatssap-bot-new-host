@@ -83,13 +83,13 @@ export default addKeyword<Provider, Database>(["miturno", "Miturno"], {
               }
 
               await flowDynamic(
-                `*¡Hola! soy el asistente de ${medicData.name}* 🌟\n${medicData.about} 😊 \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\n\nSi quieres cancelar un turno. Escribe *cancelar*.\n\nPara cambiar la fecha de un turno. Escribe *editar*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
+                `*¡Hola! soy el asistente de ${medicData.name}* 🌟\n${medicData.about} 😊 \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\n\nSi quieres cancelar un turno. Escribe *cancelar*.\n\nPara cambiar la fecha de un turno. Escribe *editar*\n\nPara ver los horarios del especialista. Escribe *horarios*\n\nPara saber los tipos de turnos del especialista. Escribe *turnos*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
               );
               return gotoFlow(welcomeFlow);
             } else {
               await state.update({patientFound: {patientFound: false}});
               await flowDynamic(
-                `*¡Hola! soy el asistente de ${medicData.name}* 🌟\n${medicData.about} 😊 \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\n\nSi quieres cancelar un turno. Escribe *cancelar*.\n\nPara cambiar la fecha de un turno. Escribe *editar*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
+                `*¡Hola! soy el asistente de ${medicData.name}* 🌟\n${medicData.about} 😊 \n\nSi quieres *registrar un turno* o *ver tu turno*. Escribe *si quiero*.\n\nSi quieres cancelar un turno. Escribe *cancelar*.\n\nPara cambiar la fecha de un turno. Escribe *editar*\n\nPara ver los horarios del especialista. Escribe *horarios*\n\nPara saber los tipos de turnos del especialista. Escribe *turnos*\n\nEstoy aquí para facilitarte el proceso! 📅👨‍⚕️ ¡Adelante! 🌈`
               );
               return gotoFlow(welcomeFlow);
             }

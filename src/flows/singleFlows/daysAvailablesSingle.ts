@@ -68,11 +68,11 @@ export default addKeyword<Provider, Database>(
 
         const daySelectedOfMedicWork =
           medicData.businessHoursFiltered[optionChoosen];
-        console.log("DAY SELECT OF MEDIC WORK: ", daySelectedOfMedicWork);
-        const selectedDayOfWeek = daySelectedOfMedicWork.daysOfWeek[0]; // Día de la semana seleccionado por el cliente
-        const diaEligidoDayjs = dayjs()
+          const selectedDayOfWeek = daySelectedOfMedicWork.daysOfWeek[0]; // Día de la semana seleccionado por el cliente
+          const diaEligidoDayjs = dayjs()
           .set("d", selectedDayOfWeek)
           .add(medicData.week, "week");
+        console.log("DAY SELECT OF MEDIC WORK: ", diaEligidoDayjs);
         const turnsOfDaysSelectedAndAfterTodayBeforeSunday = state
           .getMyState()
           .medic.turns.filter((turn) => {
@@ -163,7 +163,7 @@ export default addKeyword<Provider, Database>(
           }
           const hourstovide = giveHours
             .map((hour, index) => ({
-              body: `*${index}*. Horarios disponibles en el día *${hour}* ⏰`,
+              body: `*${index}*. Horarios disponibles en el día *${dayjs().set("h", hour.split(":")[0]).set("m", hour.split(":")[1]).format("hh:mm a")}* ⏰`,
             }))
             .concat([
               {

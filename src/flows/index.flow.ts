@@ -52,6 +52,7 @@ import getName from "./singleFlows/getInformation/getName";
 import getLastname from "./singleFlows/getInformation/getLastname";
 import getDni from "./singleFlows/getInformation/getDni";
 import getInformationOsSave from "./singleFlows/payOS/getInformationOsSave";
+import showHours from "./singleFlows/showHours";
 
 export default createFlow([
     helloFlow,
@@ -108,5 +109,6 @@ export default createFlow([
     yearOfBirth,
     getName,
     getLastname,
-    getDni
+    getDni,
+    showHours
 ])

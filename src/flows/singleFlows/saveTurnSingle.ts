@@ -38,10 +38,8 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_SINGLE"))
   .addAction(async (ctx, { flowDynamic, gotoFlow, state }) => {
     const medicData = state.getMyState().medic;
     const hour = medicData.hourChoosenTofirebase;
-    console.log("HORA: ", hour);
-    const horarioeligidOfORMATEED =
-        medicData.horariosformatted[+ctx.body];
-        
+    const horarioeligidOfORMATEED = medicData.horariosformatted[+ctx.body];
+    console.log("HORA: ", horarioeligidOfORMATEED);
       await state.update({
         medic: {
           ...medicData,
@@ -52,7 +50,7 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_SINGLE"))
                     .add(medicData.week, "week")
                     .format("YYYY-MM-DDTHH:mm:ss")
                 : dayjs(horarioeligidOfORMATEED).format("YYYY-MM-DDTHH:mm:ss")
-              : horarioeligidOfORMATEED,
+              : dayjs(horarioeligidOfORMATEED).format("YYYY-MM-DDTHH:mm:ss"),
         },
       });
       if (horarioeligidOfORMATEED === undefined) {
@@ -67,8 +65,8 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_SINGLE"))
       }
     if (state.getMyState().action === 1) {
         await flowDynamic(
-          `¡Muy bien! 🌟 Elegiste un turno para el día *${dayjs(hour).format(
-            "dddd D, MMMM HH:mm a"
+          `¡Muy bien! 🌟 Elegiste un turno para el día *${dayjs(horarioeligidOfORMATEED).format(
+            "dddd D, MMMM hh:mm a"
           )}*`
         )
         return gotoFlow(isAgreeToSave)
@@ -84,8 +82,8 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_SINGLE"))
           },
         });
           await flowDynamic(
-            `¡Muy bien! 🌟 Elegiste un turno para el día *${dayjs(hour).format(
-              "dddd D, MMMM HH:mm a"
+            `¡Muy bien! 🌟 Elegiste un turno para el día *${dayjs(horarioeligidOfORMATEED).format(
+              "dddd D, MMMM hh:mm a"
             )}*.\n\nAntes de guardar, hagamos algunas preguntas importantes. 🤔`
           )
           return gotoFlow(getName)
@@ -97,8 +95,8 @@ export default addKeyword<Provider, Database>(utils.setEvent("SAVETURN_SINGLE"))
         },
       });
         await flowDynamic(
-          `¡Muy bien! 🌟 Eligiste un turno para el día *${dayjs(hour).format(
-            "dddd D, MMMM HH:mm a"
+          `¡Muy bien! 🌟 Eligiste un turno para el día *${dayjs(horarioeligidOfORMATEED).format(
+            "dddd D, MMMM hh:mm a"
           )}*.\n\n*Usaremos tu informacion que ya esta en el sistema.*`
         )
         return gotoFlow(isAgreeToSave)

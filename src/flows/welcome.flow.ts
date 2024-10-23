@@ -10,6 +10,7 @@ import cancelTurnWelcome from "./cancelTurn/cancelTurnWelcome";
 import menuFlow from "./menu.flow";
 import giveDaysWhenMedicWorkNextWeekSingle from "./singleFlows/giveDaysWhenMedicWorkNextWeekSingle";
 import giveDaysWhenMedicWorkSingle from "./singleFlows/giveDaysWhenMedicWorkSingle";
+import showHours from "./singleFlows/showHours";
 /* import giveDaysWhenMedicWorkSingle from "../flows/singleFlows/giveDaysWhenMedicWorkSingle.js";
 import giveDaysWhenMedicWorkNextWeekSingle from "../flows/singleFlows/giveDaysWhenMedicWorkNextWeekSingle.js";
 import giveQueryTypesSingle from "../flows/singleFlows/giveQueryTypesSingle.js";
@@ -28,8 +29,16 @@ export default addKeyword<Provider, Database>(
     /* if (ctx.body.toLowerCase() == "pagar") {
       return gotoFlow(payFlowCome)
     } */
+    if (ctx.body.toLocaleLowerCase() === "horarios") {
+      await state.update({ justToSee: true });
+      return gotoFlow(showHours);
+    }
+    if (ctx.body.toLocaleLowerCase() === "turnos") {
+      await state.update({ justToSee: true });
+      return gotoFlow(giveQueryTypesSingle);
+    }
     if (ctx.body.toLocaleLowerCase() == "si quiero") {
-      
+      await state.update({justToSee: false})
       const medicData = state.getMyState().medic;
       const turnosWithouFixed = medicData.turns
         .filter(
@@ -58,13 +67,13 @@ export default addKeyword<Provider, Database>(
         };
       });
       if (turnosWithouFixed.length === 0 && turnosFixedMaps.length === 0) {
-      console.log("ENTRA POR ACA ?? VA A DAR LOS TIPOS DE TURNOS");
+        console.log("ENTRA POR ACA ?? VA A DAR LOS TIPOS DE TURNOS");
 
-         return gotoFlow(giveQueryTypesSingle);
+        return gotoFlow(giveQueryTypesSingle);
       }
       let mensajeDeTurnos;
       if (turnosFixedMaps.length > 0) {
-        const paymentsChanged = turnosFixedMaps.map((turno)=>{
+        const paymentsChanged = turnosFixedMaps.map((turno) => {
           if (Object.prototype.hasOwnProperty.call(turno, "payment")) {
             console.log("entra aca");
             let reestablecido;
@@ -83,9 +92,15 @@ export default addKeyword<Provider, Database>(
               diadelpago.get("d") == 0
                 ? diadelpago.startOf("week").add(1, "week").day(0)
                 : diadelpago.startOf("week").day(0);
-                console.log("INICO SEMANA HOY: ", inicioSemanaHoy.format("DD/MM/YYYY"));
-                console.log("INICO SEMANA HOY: ", inicioSemanaPago.format("DD/MM/YYYY"));
-                
+            console.log(
+              "INICO SEMANA HOY: ",
+              inicioSemanaHoy.format("DD/MM/YYYY")
+            );
+            console.log(
+              "INICO SEMANA HOY: ",
+              inicioSemanaPago.format("DD/MM/YYYY")
+            );
+
             if (
               hoy.get("d") > turno.daysOfWeek[0] &&
               inicioSemanaHoy.isSame(inicioSemanaPago, "week") &&
@@ -118,10 +133,12 @@ export default addKeyword<Provider, Database>(
                 payment: null,
               };
             }
-            if ( hoy.day() === turno.daysOfWeek[0] &&
-            inicioSemanaHoy.isAfter(inicioSemanaPago, "week") &&
-            diadelpago.isBefore(diaDelTurno, "minute") &&
-            diadelpago.isSameOrBefore(diaDelTurno, "d")) {
+            if (
+              hoy.day() === turno.daysOfWeek[0] &&
+              inicioSemanaHoy.isAfter(inicioSemanaPago, "week") &&
+              diadelpago.isBefore(diaDelTurno, "minute") &&
+              diadelpago.isSameOrBefore(diaDelTurno, "d")
+            ) {
               return {
                 ...turno,
                 week: 1,
@@ -131,8 +148,8 @@ export default addKeyword<Provider, Database>(
               };
             }
           }
-          return {...turno}
-        })
+          return { ...turno };
+        });
         mensajeDeTurnos = paymentsChanged
           .map((turno) => {
             const fechaFormateada = dayjs()
@@ -231,7 +248,9 @@ export default addKeyword<Provider, Database>(
         } \n\nEscribe *${
           "mispagos" + " " + medicData.consultName
         }* para pagar tus turnos.
-        \nSi deseas ver el menu principal, escribe *miturno ${medicData.consultName}*`
+        \nSi deseas ver el menu principal, escribe *miturno ${
+          medicData.consultName
+        }*`
       );
       /* switch (turno.status) {
         case "TRANSFER_CUSTOMER_NO":
@@ -350,29 +369,42 @@ export default addKeyword<Provider, Database>(
           break;
       } */
     }
-     if (ctx.body.toLocaleLowerCase() === "consulta") {
+    if (ctx.body.toLocaleLowerCase() === "consulta") {
+      await state.update({justToSee: false})
       return gotoFlow(giveQueryTypesSingle);
     }
     if (ctx.body.toLocaleLowerCase() === "editar") {
+      await state.update({justToSee: false})
       return gotoFlow(editTurnWelcome);
     }
     if (ctx.body.toLocaleLowerCase() === "cancelar") {
+      await state.update({justToSee: false})
       return gotoFlow(cancelTurnWelcome);
     }
     if (ctx.body.toLocaleLowerCase() === "menu") {
+      await state.update({justToSee: false})
       if (state.getMyState() === undefined) {
         return await flowDynamic("Caracter incorrecto");
       }
       return gotoFlow(menuFlow);
     }
     if (state.getMyState().medic.turnsZeroThisWeek) {
-      if (ctx.body.toLocaleLowerCase() === "proxima" || ctx.body.toLowerCase() === "Proxima" || ctx.body.toLowerCase() === "Próxima") {
+      await state.update({justToSee: false})
+      if (
+        ctx.body.toLocaleLowerCase() === "proxima" ||
+        ctx.body.toLowerCase() === "Proxima" ||
+        ctx.body.toLowerCase() === "Próxima"
+      ) {
         return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
       } else {
         return gotoFlow(giveDaysWhenMedicWorkSingle);
       }
-    } else {
-      if (ctx.body.toLocaleLowerCase() === "proxima" || ctx.body.toLowerCase() === "Proxima" || ctx.body.toLowerCase() === "Próxima") {
+    } else {await state.update({justToSee: false})
+      if (
+        ctx.body.toLocaleLowerCase() === "proxima" ||
+        ctx.body.toLowerCase() === "Proxima" ||
+        ctx.body.toLowerCase() === "Próxima"
+      ) {
         return gotoFlow(giveDaysWhenMedicWorkNextWeekSingle);
       }
       if (ctx.body.toLocaleLowerCase() === "actual") {
@@ -381,7 +413,7 @@ export default addKeyword<Provider, Database>(
         return gotoFlow(giveQueryTypesSingle);
       }
     }
-    await flowDynamic("Opcion incorrecta..❌")
+    await flowDynamic("Opcion incorrecta..❌");
     return gotoFlow(menuFlow);
   }
 );
